@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="id" class="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Reader - Komikku</title>
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          surface: "#131315",
+          "surface-container-low": "#1b1b1d",
+          "surface-container": "#201f21",
+          "surface-container-high": "#2a2a2c",
+          "on-surface": "#e5e1e4",
+          "on-surface-variant": "#e6bdbb",
+          outline: "#ad8887",
+          "outline-variant": "#5d3f3f",
+          primary: "#ffb3b2",
+          "primary-container": "#ff525d",
+          background: "#131315"
+        },
+        fontFamily: {
+          sans: ["Plus Jakarta Sans", "sans-serif"]
+        }
+      }
+    }
+  }
+</script>
+<style>
+  .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
+  .bar-transition { transition: transform 0.25s ease-in-out; }
+  #pages img {
+    display: block; width: 100%; height: auto;
+    min-height: 600px;
+    background: #18181c;
+  }
+  #pages img.loaded { min-height: 0; }
+</style>
+</head>
+<body class="bg-background text-on-surface font-sans antialiased min-h-screen flex flex-col selection:bg-primary-container selection:text-white">
+
+  <!-- Top Floating Bar -->
+  <header id="bar" class="fixed top-0 inset-x-0 z-50 bg-surface-container-low/95 backdrop-blur-md border-b border-outline-variant bar-transition">
+    <div class="max-w-[840px] mx-auto px-4 h-14 flex items-center justify-between gap-3 text-sm">
+      <a id="back" href="/library.html" class="flex items-center gap-1.5 text-on-surface-variant hover:text-on-surface transition-colors py-1">
+        <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+        <span class="hidden sm:inline font-medium">Kembali</span>
+      </a>
+
+      <div class="flex-1 text-center truncate font-bold text-on-surface px-2" id="title">
+        Memuat chapter…
+      </div>
+
+      <div class="flex items-center gap-2">
+        <label class="hidden md:flex items-center gap-1.5 text-xs text-on-surface-variant cursor-pointer mr-2 select-none">
+          <input type="checkbox" id="trim" class="rounded border-outline-variant text-primary-container focus:ring-0 bg-surface-container">
+          <span>Buang awal/akhir</span>
+        </label>
+
+        <a id="prevTop" href="#" aria-disabled="true" class="px-2.5 py-1 rounded-lg border border-outline-variant bg-surface-container hover:bg-surface-container-high transition-colors flex items-center gap-1 aria-disabled:opacity-30 aria-disabled:pointer-events-none" title="Chapter Sebelumnya">
+          <span class="material-symbols-outlined text-[16px]">chevron_left</span>
+          <span class="hidden sm:inline text-xs">Prev</span>
+        </a>
+        <a id="nextTop" href="#" aria-disabled="true" class="px-2.5 py-1 rounded-lg border border-outline-variant bg-surface-container hover:bg-surface-container-high transition-colors flex items-center gap-1 aria-disabled:opacity-30 aria-disabled:pointer-events-none" title="Chapter Berikutnya">
+          <span class="hidden sm:inline text-xs">Next</span>
+          <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Content Canvas -->
+  <main class="flex-1 max-w-[840px] w-full mx-auto pt-14 pb-12">
+    <div id="status" class="py-24 text-center text-on-surface-variant">Memuat halaman komik…</div>
+    <div id="pages" class="flex flex-col items-center"></div>
+
+    <div class="max-w-[840px] mx-auto px-4 pt-10 pb-16 flex items-center justify-between gap-4">
+      <a id="prevBot" href="#" aria-disabled="true" class="flex-1 py-3 px-4 rounded-xl bg-surface-container border border-outline-variant hover:border-outline text-center font-semibold text-sm transition-colors aria-disabled:opacity-30 aria-disabled:pointer-events-none flex items-center justify-center gap-2">
+        <span class="material-symbols-outlined text-[18px]">chevron_left</span>
+        <span>Chapter Sebelumnya</span>
+      </a>
+      <a id="nextBot" href="#" aria-disabled="true" class="flex-1 py-3 px-4 rounded-xl bg-primary-container text-white text-center font-semibold text-sm hover:opacity-90 transition-opacity aria-disabled:opacity-30 aria-disabled:pointer-events-none flex items-center justify-center gap-2 shadow-sm">
+        <span>Chapter Berikutnya</span>
+        <span class="material-symbols-outlined text-[18px]">chevron_right</span>
+      </a>
+    </div>
+  </main>
+
+<script>
+const API_CHAPTER = (id) => `/api/chapter/${id}`;
+const IMG_PROXY   = (url) => `/img?url=${encodeURIComponent(url)}`;
+const USE_PROXY   = false;
+
+const $ = (s) => document.querySelector(s);
+const params    = new URLSearchParams(location.search);
+const chapterId = params.get('id');
+const mangaId   = params.get('manga');
+
+const status  = $('#status');
+const pagesEl = $('#pages');
+const trimBox = $('#trim');
+
+function setStatus(msg, isError = false) {
+  status.textContent = msg;
+  status.className = `py-24 text-center ${isError ? 'text-red-400 font-semibold' : 'text-on-surface-variant'}`;
+  status.style.display = msg ? '' : 'none';
+}
+
+function setNav(prevId, nextId) {
+  const link = (id) => id ? `reader.html?id=${id}${mangaId ? `&manga=${mangaId}` : ''}` : '#';
+  for (const [sel, id] of [['#prevTop', prevId], ['#prevBot', prevId], ['#nextTop', nextId], ['#nextBot', nextId]]) {
+    const a = $(sel);
+    a.href = link(id);
+    a.setAttribute('aria-disabled', id ? 'false' : 'true');
+  }
+  if (mangaId) $('#back').href = `chapters.html?manga=${mangaId}`;
+}
+
+let chapter = null;
+
+function renderPages() {
+  pagesEl.replaceChildren();
+  let files = chapter.files;
+  if (trimBox.checked && files.length > 2) files = files.slice(1, -1);
+
+  const frag = document.createDocumentFragment();
+  files.forEach((name, i) => {
+    const url = chapter.base + chapter.path + name;
+    const img = document.createElement('img');
+    img.alt = `Halaman ${i + 1}`;
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.referrerPolicy = 'no-referrer';
+    img.addEventListener('load', () => img.classList.add('loaded'));
+    img.addEventListener('error', () => {
+      if (img.dataset.retry) return;
+      img.dataset.retry = '1';
+      setTimeout(() => { img.src = USE_PROXY ? IMG_PROXY(url) : url; }, 800);
+    });
+    img.src = USE_PROXY ? IMG_PROXY(url) : url;
+    frag.appendChild(img);
+  });
+  pagesEl.appendChild(frag);
+}
+
+async function load() {
+  if (!chapterId) return setStatus('Parameter ?id= (chapter_id) tidak ada.', true);
+  try {
+    const res = await fetch(API_CHAPTER(chapterId));
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+    const d = json.data ?? json;
+
+    chapter = {
+      base:  d.base_url,
+      path:  d.chapter.path,
+      files: d.chapter.data,
+      prev:  d.prev_chapter_id ?? null,
+      next:  d.next_chapter_id ?? null,
+      number: d.chapter.chapter_number ?? d.chapter_number ?? '',
+    };
+
+    document.title = `Chapter ${chapter.number} - Komikku`;
+    $('#title').textContent = `Chapter ${chapter.number}`;
+    setNav(chapter.prev, chapter.next);
+    setStatus('');
+    renderPages();
+    saveProgress();
+  } catch (e) {
+    setStatus(`Gagal memuat chapter: ${e.message}`, true);
+  }
+}
+
+function saveProgress() {
+  if (!mangaId) return;
+  try {
+    const all = JSON.parse(localStorage.getItem('progress') || '{}');
+    all[mangaId] = { chapterId, number: chapter.number, at: Date.now() };
+    localStorage.setItem('progress', JSON.stringify(all));
+  } catch {}
+}
+
+trimBox.checked = localStorage.getItem('trim') === '1';
+trimBox.addEventListener('change', () => {
+  localStorage.setItem('trim', trimBox.checked ? '1' : '0');
+  if (chapter) renderPages();
+});
+
+let lastY = 0;
+addEventListener('scroll', () => {
+  const y = scrollY;
+  $('#bar').classList.toggle('-translate-y-full', y > lastY && y > 120);
+  lastY = y;
+}, { passive: true });
+
+addEventListener('keydown', (e) => {
+  if (!chapter || e.target.tagName === 'INPUT') return;
+  if (e.key === 'ArrowLeft' && chapter.prev)  $('#prevTop').click();
+  if (e.key === 'ArrowRight' && chapter.next) $('#nextTop').click();
+});
+
+load();
+</script>
+</body>
+</html>

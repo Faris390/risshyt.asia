@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="id" class="dark">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>Komikku - Platform Baca Manga & Manhwa Terlengkap</title>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet">
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            surface: "#131315",
+            "surface-dim": "#131315",
+            "surface-bright": "#39393b",
+            "surface-container-lowest": "#0e0e10",
+            "surface-container-low": "#1b1b1d",
+            "surface-container": "#201f21",
+            "surface-container-high": "#2a2a2c",
+            "surface-container-highest": "#353437",
+            "on-surface": "#e5e1e4",
+            "on-surface-variant": "#e6bdbb",
+            outline: "#ad8887",
+            "outline-variant": "#5d3f3f",
+            primary: "#ffb3b2",
+            "primary-container": "#ff525d",
+            secondary: "#b4c5ff",
+            background: "#131315"
+          },
+          fontFamily: {
+            sans: ["Plus Jakarta Sans", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      vertical-align: middle;
+    }
+
+    .line-clamp-1 {
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .line-clamp-3 {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+  </style>
+</head>
+
+<body
+  class="bg-background text-on-surface antialiased font-sans min-h-screen flex flex-col selection:bg-primary-container selection:text-white pb-16 md:pb-0">
+
+  <!-- ================= TOP NAVIGATION BAR ================= -->
+  <header class="bg-surface-container-low sticky top-0 z-50 border-b border-outline-variant">
+    <div class="w-full px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4 max-w-[1440px] mx-auto">
+      <div class="flex items-center gap-6">
+        <a class="flex items-center gap-2" href="/index.html">
+          <span
+            class="w-7 h-7 rounded bg-primary-container flex items-center justify-center text-white text-sm font-bold">K</span>
+          <span class="font-bold tracking-tight text-lg text-on-surface">Komikku</span>
+        </a>
+
+        <!-- Global Search Bar -->
+        <div class="relative hidden xl:block w-72">
+          <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-on-surface-variant">
+            <span class="material-symbols-outlined text-[18px]">search</span>
+          </span>
+          <input id="nav-search"
+            class="w-full bg-surface-container border border-outline-variant rounded-xl pl-9 pr-12 py-1.5 text-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary-container transition-colors"
+            placeholder="Cari dalam koleksi..." type="text">
+          <div class="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none">
+            <kbd
+              class="px-1.5 py-0.5 text-[10px] text-outline border border-outline-variant rounded bg-surface-container-lowest">Ctrl
+              K</kbd>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="hidden md:flex items-center space-x-6 h-16">
+        <a class="h-full flex items-center px-1 text-sm font-semibold border-b-2 border-primary-container text-primary"
+          href="/index.html">Home</a>
+        <a class="h-full flex items-center px-1 text-sm text-on-surface-variant hover:text-on-surface transition-colors"
+          href="/browse.html">Browse</a>
+        <a class="h-full flex items-center px-1 text-sm text-on-surface-variant hover:text-on-surface transition-colors"
+          href="/rankings.html">Rankings</a>
+        <a class="h-full flex items-center px-1 text-sm text-on-surface-variant hover:text-on-surface transition-colors"
+          href="/library.html">Library</a>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a href="/library.html"
+          class="p-2 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors"
+          title="Library">
+          <span class="material-symbols-outlined text-[20px]">collections_bookmark</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ================= MAIN CONTENT CANVAS ================= -->
+  <main class="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-8">
+
+    <!-- State Loading / Kosong -->
+    <div id="home-status"
+      class="py-16 text-center text-on-surface-variant bg-surface-container-low rounded-2xl border border-outline-variant">
+      Memuat data dari perpustakaan…
+    </div>
+
+    <!-- Hero Spotlight Bento Card (Dinamis dari Komik Teratas) -->
+    <a id="hero-spotlight" href="#"
+      class="w-full relative rounded-2xl overflow-hidden bg-surface-container-low border border-outline-variant hover:border-primary-container transition-all cursor-pointer block group"
+      hidden></a>
+
+    <!-- Filter Control Hub (Multi-Filter & Quick Chips) -->
+    <section id="filter-hub" class="bg-surface-container-low p-4 rounded-xl border border-outline-variant space-y-3"
+      hidden>
+      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-outline-variant pb-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-outline text-xs uppercase tracking-wider mr-1">Tipe:</span>
+          <button data-type="Semua"
+            class="type-btn px-3 py-1 rounded-lg bg-primary-container text-white text-xs font-semibold">Semua</button>
+          <button data-type="Manhwa"
+            class="type-btn px-3 py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant text-xs transition-colors border border-outline-variant">Manhwa</button>
+          <button data-type="Manga"
+            class="type-btn px-3 py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant text-xs transition-colors border border-outline-variant">Manga</button>
+          <button data-type="Manhua"
+            class="type-btn px-3 py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant text-xs transition-colors border border-outline-variant">Manhua</button>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="text-outline text-xs uppercase tracking-wider">Urutkan:</span>
+          <select id="sort-select"
+            class="bg-surface-container border border-outline-variant text-on-surface text-xs rounded-lg px-3 py-1.5 appearance-none focus:outline-none focus:border-primary-container cursor-pointer">
+            <option value="latest">Update Terkini</option>
+            <option value="views">Paling Populer</option>
+            <option value="rate">Rating Tertinggi</option>
+            <option value="title">Judul (A-Z)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Genre Pills Carousel -->
+      <div id="genre-pills" class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none"></div>
+    </section>
+
+    <!-- Main Content Layout (Grid + Right Sidebar) -->
+    <div id="catalog-container" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start" hidden>
+
+      <!-- Primary Catalog Grid Area -->
+      <section class="lg:col-span-8 flex flex-col gap-6">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <h2 class="text-xl font-bold text-on-surface tracking-tight">Koleksi &amp; Pembaruan Komik</h2>
+            <span id="comic-count-badge"
+              class="px-2 py-0.5 rounded-full bg-surface-container text-outline text-xs"></span>
+          </div>
+          <a href="/library.html" class="text-xs font-semibold text-primary hover:underline flex items-center gap-1">
+            Kelola di Library
+            <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+          </a>
+        </div>
+
+        <!-- Comic Cards Grid -->
+        <div id="comic-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+      </section>
+
+      <!-- Sidebar Kanan -->
+      <aside class="lg:col-span-4 flex flex-col gap-6">
+        <!-- Widget: Lanjutkan Membaca -->
+        <div id="sidebar-resume-widget"
+          class="bg-surface-container-low rounded-xl border border-outline-variant p-4 space-y-3" hidden>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary-container text-[20px]">history_toggle_off</span>
+              <h3 class="text-sm font-bold text-on-surface">Lanjutkan Membaca</h3>
+            </div>
+          </div>
+          <div id="sidebar-resume-list" class="space-y-2"></div>
+        </div>
+
+        <!-- Widget: Top Komik Berdasarkan Metrik API -->
+        <div class="bg-surface-container-low rounded-xl border border-outline-variant p-4 space-y-4">
+          <div class="flex items-center justify-between border-b border-outline-variant pb-3">
+            <div>
+              <h3 class="text-sm font-bold text-on-surface">Top Komik Koleksi</h3>
+              <p class="text-xs text-outline">Berdasarkan data pembaca &amp; bookmark</p>
+            </div>
+            <span class="material-symbols-outlined text-amber-400 text-[20px]"
+              style="font-variation-settings: 'FILL' 1;">leaderboard</span>
+          </div>
+          <div id="top-comics-list" class="space-y-3"></div>
+          <a href="/rankings.html"
+            class="w-full py-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface text-xs font-semibold flex items-center justify-center transition-colors border border-outline-variant">
+            Buka Papan Peringkat Lengkap
+          </a>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Mobile Bottom Nav -->
+  <nav
+    class="md:hidden fixed bottom-0 left-0 w-full z-50 flex items-center justify-around px-4 py-2 bg-surface-container-low/95 backdrop-blur-md border-t border-outline-variant">
+    <a href="/index.html" class="flex flex-col items-center gap-1 text-primary font-bold text-xs py-1">
+      <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">home</span>
+      <span>Home</span>
+    </a>
+    <a href="/browse.html" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
+      <span class="material-symbols-outlined text-[20px]">explore</span>
+      <span>Browse</span>
+    </a>
+    <a href="/rankings.html" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
+      <span class="material-symbols-outlined text-[20px]">leaderboard</span>
+      <span>Rankings</span>
+    </a>
+    <a href="/library.html" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
+      <span class="material-symbols-outlined text-[20px]">collections_bookmark</span>
+      <span>Library</span>
+    </a>
+  </nav>
+
+  <footer
+    class="bg-surface-container-lowest w-full border-t border-outline-variant mt-12 py-6 text-center text-xs text-on-surface-variant hidden md:block">
+    <p>© 2025 Komikku — Personal Web Reader</p>
+  </footer>
+
+  <script>
+    const LIBRARY_URL = '/library.json';
+    const API_MANGA = (id) => `/api/manga/${id}`;
+    const DELAY_MS = 300;
+
+    const $ = (s) => document.querySelector(s);
+    const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+    function esc(str) {
+      if (str == null) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function progressMap() {
+      try { return JSON.parse(localStorage.getItem('progress') || '{}'); } catch { return {}; }
+    }
+
+    let allComics = [];
+    let selectedType = 'Semua';
+    let selectedGenre = 'Semua';
+
+    function renderSpotlight(m) {
+      const el = $('#hero-spotlight');
+      if (!m) { el.hidden = true; return; }
+
+      const cover = m.cover_portrait_url || m.cover_image_url || '';
+      const title = esc(m.title);
+      const desc = esc(m.description || 'Pembalasan dendam dan petualangan fantasi luar biasa.');
+      const type = esc(m.taxonomy?.Format?.[0]?.name || 'KOMIK');
+      const rating = m.user_rate ? Number(m.user_rate).toFixed(2) : '4.90';
+      const genres = (m.taxonomy?.Genre || []).slice(0, 4);
+
+      el.href = `chapters.html?manga=${m.manga_id}`;
+      el.innerHTML = `
+    <div class="grid grid-cols-1 lg:grid-cols-12 min-h-[360px] lg:h-[400px]">
+      <div class="lg:col-span-7 p-6 lg:p-8 flex flex-col justify-between z-10 bg-gradient-to-r from-surface-container-low via-surface-container-low/95 to-transparent">
+        <div class="space-y-3 max-w-xl">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full bg-primary-container text-white text-[11px] font-bold uppercase tracking-wider">Recommended</span>
+            <span class="px-2.5 py-0.5 rounded bg-surface-container text-secondary text-[11px] font-semibold">${type}</span>
+            <div class="flex items-center text-amber-400 gap-1 ml-2">
+              <span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
+              <span class="text-on-surface font-semibold text-xs">${rating}</span>
+            </div>
+          </div>
+          <h1 class="text-2xl lg:text-3xl font-extrabold text-on-surface group-hover:text-primary transition-colors tracking-tight leading-tight">${title}</h1>
+          <p class="text-xs sm:text-sm text-on-surface-variant line-clamp-3">${desc}</p>
+          <div class="flex flex-wrap gap-1.5 pt-1">
+            ${genres.map(g => `<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant text-[11px] border border-outline-variant">${esc(g.name)}</span>`).join('')}
+          </div>
+        </div>
+        <div class="pt-6 flex flex-wrap items-center justify-between border-t border-outline-variant/50 mt-4 text-xs text-on-surface-variant">
+          ${m.latest_chapter_number != null ? `
+            <div class="flex items-center gap-2">
+              <span class="text-on-surface font-semibold">Ch. ${esc(m.latest_chapter_number)}</span>
+            </div>
+          ` : `<div></div>`}
+        </div>
+      </div>
+      <div class="lg:col-span-5 relative h-60 lg:h-full overflow-hidden border-t lg:border-t-0 lg:border-l border-outline-variant bg-surface-container">
+        ${cover ? `<img src="${cover}" alt="${title}" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300" referrerpolicy="no-referrer">` : `<div class="w-full h-full flex items-center justify-center text-outline"><span class="material-symbols-outlined text-5xl">menu_book</span></div>`}
+        <div class="absolute inset-0 bg-gradient-to-t from-surface-container-low via-transparent to-transparent lg:hidden"></div>
+      </div>
+    </div>
+  `;
+      el.hidden = false;
+    }
+
+    function renderCatalogGrid() {
+      const grid = $('#comic-grid');
+      grid.replaceChildren();
+
+      const sortVal = $('#sort-select').value;
+      let list = [...allComics];
+
+      if (selectedType !== 'Semua') {
+        list = list.filter(c => (c.taxonomy?.Format?.[0]?.name || '').toLowerCase() === selectedType.toLowerCase());
+      }
+      if (selectedGenre !== 'Semua') {
+        list = list.filter(c => (c.taxonomy?.Genre || []).some(g => g.name.toLowerCase() === selectedGenre.toLowerCase()));
+      }
+
+      if (sortVal === 'views') list.sort((a, b) => (b.view_count || 0) - (a.view_count || 0));
+      else if (sortVal === 'rate') list.sort((a, b) => (b.user_rate || 0) - (a.user_rate || 0));
+      else if (sortVal === 'title') list.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+      else list.sort((a, b) => (b.latest_chapter_number || 0) - (a.latest_chapter_number || 0));
+
+      const prog = progressMap();
+
+      for (const c of list) {
+        const cover = c.cover_portrait_url || c.cover_image_url || '';
+        const title = esc(c.title);
+        const type = esc(c.taxonomy?.Format?.[0]?.name || 'KOMIK');
+        const genres = (c.taxonomy?.Genre || []).slice(0, 2).map(g => g.name).join(', ') || 'Serial';
+        const latestCh = c.latest_chapter_number != null ? `Ch. ${esc(c.latest_chapter_number)}` : '';
+        const rate = c.user_rate ? Number(c.user_rate).toFixed(1) : '4.9';
+        const p = prog[c.manga_id];
+
+        const card = document.createElement('article');
+        card.className = 'group flex flex-col bg-surface-container-low rounded-xl overflow-hidden border border-outline-variant hover:border-primary-container transition-all';
+        card.innerHTML = `
+      <a href="chapters.html?manga=${c.manga_id}" class="relative aspect-[3/4] overflow-hidden bg-surface-container block">
+        ${cover ? `<img src="${cover}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" referrerpolicy="no-referrer" loading="lazy">` : `<div class="w-full h-full flex items-center justify-center text-outline"><span class="material-symbols-outlined text-3xl">menu_book</span></div>`}
+        <div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent opacity-80"></div>
+        <span class="absolute top-2 left-2 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase bg-primary-container text-white shadow">
+          ${p ? 'BACA' : 'UP'}
+        </span>
+        <span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-surface-container-lowest/90 backdrop-blur-sm text-secondary text-[10px] font-semibold border border-outline-variant/60">
+          ${type}
+        </span>
+        <div class="absolute bottom-2 left-2 flex items-center gap-1 text-[11px] font-semibold text-on-surface">
+          <span class="material-symbols-outlined text-amber-400 text-[13px]" style="font-variation-settings: 'FILL' 1;">star</span>
+          <span>${rate}</span>
+        </div>
+      </a>
+      <div class="p-3 flex flex-col justify-between flex-1 gap-2">
+        <div>
+          <a href="chapters.html?manga=${c.manga_id}" class="font-bold text-sm text-on-surface group-hover:text-primary transition-colors line-clamp-1" title="${title}">
+            ${title}
+          </a>
+          <p class="text-[11px] text-outline truncate">${esc(genres)}</p>
+        </div>
+        <div class="flex items-center justify-between pt-2 border-t border-outline-variant/60 text-xs">
+          <span class="text-primary font-semibold">${latestCh}</span>
+          ${p ? `<a href="reader.html?id=${p.chapterId}&manga=${c.manga_id}" class="text-[11px] text-primary hover:underline font-bold">Lanjut</a>` : `<span class="text-[11px] text-outline">Koleksi</span>`}
+        </div>
+      </div>
+    `;
+        grid.appendChild(card);
+      }
+
+      if (!list.length) {
+        grid.innerHTML = '<div class="col-span-full py-12 text-center text-sm text-outline">Tidak ada komik dalam filter ini.</div>';
+      }
+    }
+
+    function renderSidebarWidgets() {
+      // Lanjutkan Membaca
+      const prog = progressMap();
+      const resumeContainer = $('#sidebar-resume-list');
+      const resumeSection = $('#sidebar-resume-widget');
+      resumeContainer.replaceChildren();
+
+      const progEntries = Object.entries(prog).sort((a, b) => (b[1].at || 0) - (a[1].at || 0));
+      let hasResume = false;
+
+      for (const [mId, p] of progEntries) {
+        const comic = allComics.find(c => c.manga_id === mId);
+        if (!comic) continue;
+        hasResume = true;
+        const cover = comic.cover_portrait_url || comic.cover_image_url || '';
+        const item = document.createElement('div');
+        item.className = 'flex items-center gap-3 p-2 rounded-xl bg-surface-container border border-outline-variant';
+        item.innerHTML = `
+      <div class="w-10 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container-high">
+        ${cover ? `<img src="${cover}" alt="${esc(comic.title)}" class="w-full h-full object-cover" referrerpolicy="no-referrer">` : ''}
+      </div>
+      <div class="flex-1 min-w-0">
+        <h4 class="font-bold text-xs text-on-surface truncate">${esc(comic.title)}</h4>
+        <p class="text-[11px] text-on-surface-variant">Chapter ${esc(p.number)}</p>
+      </div>
+      <a href="reader.html?id=${p.chapterId}&manga=${comic.manga_id}" class="p-1.5 rounded-lg text-primary hover:bg-surface-container-high transition-colors" title="Lanjut">
+        <span class="material-symbols-outlined text-[18px]">play_circle</span>
+      </a>
+    `;
+        resumeContainer.appendChild(item);
+      }
+      resumeSection.hidden = !hasResume;
+
+      // Top Komik
+      const topList = $('#top-comics-list');
+      topList.replaceChildren();
+      const sorted = [...allComics].sort((a, b) => (b.view_count || b.bookmark_count || 0) - (a.view_count || a.bookmark_count || 0)).slice(0, 5);
+
+      sorted.forEach((c, idx) => {
+        const cover = c.cover_portrait_url || c.cover_image_url || '';
+        const item = document.createElement('a');
+        item.href = `chapters.html?manga=${c.manga_id}`;
+        item.className = 'flex items-center gap-3 group cursor-pointer';
+        item.innerHTML = `
+      <span class="w-5 text-sm font-extrabold ${idx === 0 ? 'text-primary-container' : 'text-outline'} text-center">0${idx + 1}</span>
+      <div class="w-10 h-12 rounded-lg overflow-hidden border border-outline-variant flex-shrink-0 bg-surface-container-high">
+        ${cover ? `<img src="${cover}" alt="${esc(c.title)}" class="w-full h-full object-cover" referrerpolicy="no-referrer">` : ''}
+      </div>
+      <div class="flex-1 min-w-0">
+        <h4 class="font-bold text-xs text-on-surface group-hover:text-primary transition-colors truncate">${esc(c.title)}</h4>
+        <div class="flex items-center gap-2 text-[10px] text-outline mt-0.5">
+          <span>${esc(c.taxonomy?.Format?.[0]?.name || 'Komik')}</span>
+          <span>•</span>
+          <span>${c.view_count ? `${c.view_count} Reads` : `Ch. ${c.latest_chapter_number || '-'}`}</span>
+        </div>
+      </div>
+    `;
+        topList.appendChild(item);
+      });
+    }
+
+    function renderGenrePills() {
+      const container = $('#genre-pills');
+      container.replaceChildren();
+
+      const genresSet = new Set();
+      for (const c of allComics) {
+        (c.taxonomy?.Genre || []).forEach(g => genresSet.add(g.name));
+      }
+
+      const allBtn = document.createElement('button');
+      allBtn.className = 'px-3 py-1 rounded-full text-xs whitespace-nowrap bg-surface-container-high text-primary border border-primary font-semibold';
+      allBtn.textContent = 'Semua Genre';
+      allBtn.onclick = () => {
+        selectedGenre = 'Semua';
+        updatePills();
+        renderCatalogGrid();
+      };
+      container.appendChild(allBtn);
+
+      for (const g of Array.from(genresSet)) {
+        const btn = document.createElement('button');
+        btn.className = 'genre-btn px-3 py-1 rounded-full text-xs whitespace-nowrap bg-surface-container text-on-surface-variant hover:text-on-surface border border-outline-variant transition-colors';
+        btn.textContent = g;
+        btn.onclick = () => {
+          selectedGenre = g;
+          updatePills();
+          renderCatalogGrid();
+        };
+        container.appendChild(btn);
+      }
+
+      function updatePills() {
+        container.querySelectorAll('button').forEach(b => {
+          const match = (b.textContent === 'Semua Genre' && selectedGenre === 'Semua') || b.textContent === selectedGenre;
+          b.className = `px-3 py-1 rounded-full text-xs whitespace-nowrap transition-colors border ${match ? 'bg-surface-container-high text-primary border-primary font-semibold' : 'bg-surface-container text-on-surface-variant hover:text-on-surface border-outline-variant'}`;
+        });
+      }
+    }
+
+    async function main() {
+      const status = $('#home-status');
+      try {
+        const res = await fetch(LIBRARY_URL);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const ids = await res.json();
+
+        if (!ids || !ids.length) {
+          status.textContent = 'Perpustakaan masih kosong. Masukkan manga_id ke public/library.json.';
+          return;
+        }
+
+        const results = await Promise.all(ids.map(async (id) => {
+          try {
+            const r = await fetch(API_MANGA(id));
+            if (r.ok) {
+              const j = await r.json();
+              return j.data ?? j;
+            }
+          } catch { }
+          return null;
+        }));
+        allComics = results.filter(Boolean);
+
+        if (!allComics.length) {
+          status.textContent = 'Gagal memuat komik dari upstream API.';
+          return;
+        }
+
+        status.hidden = true;
+        $('#comic-count-badge').textContent = `${allComics.length} Judul`;
+        $('#hero-spotlight').hidden = false;
+        $('#filter-hub').hidden = false;
+        $('#catalog-container').hidden = false;
+
+        renderSpotlight(allComics[0]);
+        renderGenrePills();
+        renderCatalogGrid();
+        renderSidebarWidgets();
+      } catch (e) {
+        status.textContent = `Terjadi kesalahan: ${e.message}`;
+      }
+    }
+
+    // Type buttons
+    document.querySelectorAll('.type-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectedType = btn.dataset.type;
+        document.querySelectorAll('.type-btn').forEach(b => {
+          b.className = b === btn
+            ? 'type-btn px-3 py-1 rounded-lg bg-primary-container text-white text-xs font-semibold'
+            : 'type-btn px-3 py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant text-xs transition-colors border border-outline-variant';
+        });
+        renderCatalogGrid();
+      });
+    });
+
+    $('#sort-select').addEventListener('change', renderCatalogGrid);
+
+    document.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        $('#nav-search').focus();
+      }
+    });
+
+    main();
+  </script>
+</body>
+
+</html>
