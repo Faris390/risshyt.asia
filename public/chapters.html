@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
-<title>Daftar Chapter - Komikku</title>
+<title>Daftar Chapter - comicshyt</title>
 <!-- Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,8 +54,8 @@
         <span class="font-semibold text-sm">Kembali ke Perpustakaan</span>
       </a>
       <div class="flex items-center gap-2">
-        <span class="w-6 h-6 rounded bg-primary-container flex items-center justify-center text-white text-xs font-bold">K</span>
-        <span class="font-bold tracking-tight">Komikku</span>
+        <span class="w-6 h-6 rounded bg-primary-container flex items-center justify-center text-white text-xs font-bold">C</span>
+        <span class="font-bold tracking-tight">comicshyt</span>
       </div>
     </div>
   </header>
@@ -103,7 +103,7 @@ const readerUrl = (c) => `reader.html?id=${c.chapter_id}&manga=${mangaId}`;
 const fmtDate = (s) => s ? new Date(s).toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' }) : '';
 
 function renderInfo(m) {
-  document.title = `${m.title} - Komikku`;
+  document.title = `${m.title} - comicshyt`;
   const genres = (m.taxonomy?.Genre || []).map(g => g.name).join(', ');
   const author = (m.taxonomy?.Author || []).map(a => a.name).join(', ');
   const cover = m.cover_portrait_url || m.cover_image_url || '';
