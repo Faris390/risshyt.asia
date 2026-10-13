@@ -139,57 +139,45 @@
       class="w-full relative rounded-2xl overflow-hidden bg-surface-container-low border border-outline-variant hover:border-primary-container transition-all cursor-pointer block group"
       hidden></a>
 
-    <!-- Filter Control Hub (Multi-Filter & Quick Chips) -->
-    <section id="filter-hub" class="bg-surface-container-low p-4 rounded-xl border border-outline-variant space-y-3"
-      hidden>
-      <div class="flex flex-wrap items-center justify-between gap-3 border-b border-outline-variant pb-3">
-        <div class="flex flex-wrap items-center gap-2">
-          <span class="text-outline text-xs uppercase tracking-wider mr-1">Tipe:</span>
-          <button data-type="Semua"
-            class="type-btn px-3 py-1 rounded-lg bg-primary-container text-white text-xs font-semibold">Semua</button>
-          <button data-type="Manhwa"
-            class="type-btn px-3 py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant text-xs transition-colors border border-outline-variant">Manhwa</button>
-          <button data-type="Manga"
-            class="type-btn px-3 py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant text-xs transition-colors border border-outline-variant">Manga</button>
-          <button data-type="Manhua"
-            class="type-btn px-3 py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant text-xs transition-colors border border-outline-variant">Manhua</button>
-        </div>
-
-        <div class="flex items-center gap-2">
-          <span class="text-outline text-xs uppercase tracking-wider">Urutkan:</span>
-          <select id="sort-select"
-            class="bg-surface-container border border-outline-variant text-on-surface text-xs rounded-lg px-3 py-1.5 appearance-none focus:outline-none focus:border-primary-container cursor-pointer">
-            <option value="latest">Update Terkini</option>
-            <option value="views">Paling Populer</option>
-            <option value="rate">Rating Tertinggi</option>
-            <option value="title">Judul (A-Z)</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Genre Pills Carousel -->
-      <div id="genre-pills" class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none"></div>
-    </section>
-
     <!-- Main Content Layout (Grid + Right Sidebar) -->
     <div id="catalog-container" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start" hidden>
 
       <!-- Primary Catalog Grid Area -->
       <section class="lg:col-span-8 flex flex-col gap-6">
-        <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between gap-4 flex-wrap">
           <div class="flex items-center gap-3">
             <h2 class="text-xl font-bold text-on-surface tracking-tight">Koleksi &amp; Pembaruan Komik</h2>
             <span id="comic-count-badge"
               class="px-2 py-0.5 rounded-full bg-surface-container text-outline text-xs"></span>
           </div>
-          <a href="/library.html" class="text-xs font-semibold text-primary hover:underline flex items-center gap-1">
-            Kelola di Library
-            <span class="material-symbols-outlined text-[16px]">chevron_right</span>
-          </a>
+          <div class="flex items-center gap-3">
+            <div class="relative flex items-center">
+              <span
+                class="material-symbols-outlined absolute left-2.5 text-outline text-[16px] pointer-events-none">sort</span>
+              <select id="sort-select"
+                class="bg-surface-container border border-outline-variant text-on-surface text-xs font-semibold rounded-lg pl-8 pr-7 py-1.5 appearance-none focus:outline-none focus:border-primary-container cursor-pointer transition-colors hover:border-outline">
+                <option value="latest">Update Terkini</option>
+                <option value="views">Paling Populer</option>
+                <option value="rate">Rating Tertinggi</option>
+                <option value="title">Judul (A-Z)</option>
+              </select>
+              <span
+                class="material-symbols-outlined absolute right-2 text-outline text-[16px] pointer-events-none">expand_more</span>
+            </div>
+            <a href="/browse.html" class="text-xs font-semibold text-primary hover:underline flex items-center gap-0.5">
+              Jelajah
+              <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+            </a>
+          </div>
         </div>
 
         <!-- Comic Cards Grid -->
         <div id="comic-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+
+        <!-- Pagination Controls -->
+        <div id="pagination-container"
+          class="hidden flex items-center justify-between pt-4 border-t border-outline-variant/60 flex-wrap gap-3">
+        </div>
       </section>
 
       <!-- Sidebar Kanan -->
@@ -275,8 +263,8 @@
     }
 
     let allComics = [];
-    let selectedType = 'Semua';
-    let selectedGenre = 'Semua';
+    const PAGE_SIZE = 12;
+    let currentPage = 1;
 
     function renderSpotlight(m) {
       const el = $('#hero-spotlight');
@@ -329,24 +317,25 @@
       const grid = $('#comic-grid');
       grid.replaceChildren();
 
-      const sortVal = $('#sort-select').value;
+      const sortVal = $('#sort-select') ? $('#sort-select').value : 'latest';
       let list = [...allComics];
-
-      if (selectedType !== 'Semua') {
-        list = list.filter(c => (c.taxonomy?.Format?.[0]?.name || '').toLowerCase() === selectedType.toLowerCase());
-      }
-      if (selectedGenre !== 'Semua') {
-        list = list.filter(c => (c.taxonomy?.Genre || []).some(g => g.name.toLowerCase() === selectedGenre.toLowerCase()));
-      }
 
       if (sortVal === 'views') list.sort((a, b) => (b.view_count || 0) - (a.view_count || 0));
       else if (sortVal === 'rate') list.sort((a, b) => (b.user_rate || 0) - (a.user_rate || 0));
       else if (sortVal === 'title') list.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
       else list.sort((a, b) => (b.latest_chapter_number || 0) - (a.latest_chapter_number || 0));
 
+      const totalItems = list.length;
+      const totalPages = Math.ceil(totalItems / PAGE_SIZE) || 1;
+      if (currentPage > totalPages) currentPage = totalPages;
+      if (currentPage < 1) currentPage = 1;
+
+      const startIndex = (currentPage - 1) * PAGE_SIZE;
+      const pageItems = list.slice(startIndex, startIndex + PAGE_SIZE);
+
       const prog = progressMap();
 
-      for (const c of list) {
+      for (const c of pageItems) {
         const cover = c.cover_portrait_url || c.cover_image_url || '';
         const title = esc(c.title);
         const type = esc(c.taxonomy?.Format?.[0]?.name || 'KOMIK');
@@ -388,9 +377,96 @@
         grid.appendChild(card);
       }
 
-      if (!list.length) {
-        grid.innerHTML = '<div class="col-span-full py-12 text-center text-sm text-outline">Tidak ada komik dalam filter ini.</div>';
+      if (!pageItems.length) {
+        grid.innerHTML = '<div class="col-span-full py-12 text-center text-sm text-outline">Perpustakaan masih kosong.</div>';
       }
+
+      renderPagination(totalPages, totalItems);
+    }
+
+    function renderPagination(totalPages, totalItems) {
+      const container = $('#pagination-container');
+      if (!container) return;
+
+      if (totalPages <= 1) {
+        container.classList.add('hidden');
+        container.classList.remove('flex');
+        container.replaceChildren();
+        return;
+      }
+
+      container.classList.remove('hidden');
+      container.classList.add('flex');
+      container.replaceChildren();
+
+      const start = (currentPage - 1) * PAGE_SIZE + 1;
+      const end = Math.min(currentPage * PAGE_SIZE, totalItems);
+
+      const infoSpan = document.createElement('span');
+      infoSpan.className = 'text-xs text-outline font-medium';
+      infoSpan.innerHTML = `Menampilkan <span class="text-on-surface font-semibold">${start}-${end}</span> dari <span class="text-on-surface font-semibold">${totalItems}</span> judul`;
+      container.appendChild(infoSpan);
+
+      const btnGroup = document.createElement('div');
+      btnGroup.className = 'flex items-center gap-1.5';
+
+      const prevBtn = document.createElement('button');
+      prevBtn.className = `px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all ${currentPage === 1 ? 'text-outline/40 bg-surface-container/40 cursor-not-allowed border border-outline-variant/30' : 'text-on-surface bg-surface-container hover:bg-surface-container-high border border-outline-variant hover:border-primary-container cursor-pointer'}`;
+      prevBtn.innerHTML = `<span class="material-symbols-outlined text-[16px]">chevron_left</span> <span class="hidden sm:inline">Sebelumnya</span>`;
+      prevBtn.disabled = currentPage === 1;
+      prevBtn.onclick = () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderCatalogGrid();
+          document.getElementById('catalog-container')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      };
+      btnGroup.appendChild(prevBtn);
+
+      for (let p = 1; p <= totalPages; p++) {
+        if (totalPages > 5 && Math.abs(p - currentPage) > 1 && p !== 1 && p !== totalPages) {
+          if (p === 2 && currentPage > 3) {
+            const ellipsis = document.createElement('span');
+            ellipsis.className = 'px-1 text-xs text-outline select-none';
+            ellipsis.textContent = '...';
+            btnGroup.appendChild(ellipsis);
+          } else if (p === totalPages - 1 && currentPage < totalPages - 2) {
+            const ellipsis = document.createElement('span');
+            ellipsis.className = 'px-1 text-xs text-outline select-none';
+            ellipsis.textContent = '...';
+            btnGroup.appendChild(ellipsis);
+          }
+          continue;
+        }
+
+        const pageBtn = document.createElement('button');
+        const isActive = p === currentPage;
+        pageBtn.className = `w-8 h-8 rounded-lg text-xs font-bold transition-all ${isActive ? 'bg-primary-container text-white shadow-sm' : 'bg-surface-container hover:bg-surface-container-high text-on-surface border border-outline-variant hover:border-primary-container cursor-pointer'}`;
+        pageBtn.textContent = p;
+        pageBtn.onclick = () => {
+          if (currentPage !== p) {
+            currentPage = p;
+            renderCatalogGrid();
+            document.getElementById('catalog-container')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        };
+        btnGroup.appendChild(pageBtn);
+      }
+
+      const nextBtn = document.createElement('button');
+      nextBtn.className = `px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all ${currentPage === totalPages ? 'text-outline/40 bg-surface-container/40 cursor-not-allowed border border-outline-variant/30' : 'text-on-surface bg-surface-container hover:bg-surface-container-high border border-outline-variant hover:border-primary-container cursor-pointer'}`;
+      nextBtn.innerHTML = `<span class="hidden sm:inline">Selanjutnya</span> <span class="material-symbols-outlined text-[16px]">chevron_right</span>`;
+      nextBtn.disabled = currentPage === totalPages;
+      nextBtn.onclick = () => {
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderCatalogGrid();
+          document.getElementById('catalog-container')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      };
+      btnGroup.appendChild(nextBtn);
+
+      container.appendChild(btnGroup);
     }
 
     function renderSidebarWidgets() {
@@ -454,45 +530,6 @@
       });
     }
 
-    function renderGenrePills() {
-      const container = $('#genre-pills');
-      container.replaceChildren();
-
-      const genresSet = new Set();
-      for (const c of allComics) {
-        (c.taxonomy?.Genre || []).forEach(g => genresSet.add(g.name));
-      }
-
-      const allBtn = document.createElement('button');
-      allBtn.className = 'px-3 py-1 rounded-full text-xs whitespace-nowrap bg-surface-container-high text-primary border border-primary font-semibold';
-      allBtn.textContent = 'Semua Genre';
-      allBtn.onclick = () => {
-        selectedGenre = 'Semua';
-        updatePills();
-        renderCatalogGrid();
-      };
-      container.appendChild(allBtn);
-
-      for (const g of Array.from(genresSet)) {
-        const btn = document.createElement('button');
-        btn.className = 'genre-btn px-3 py-1 rounded-full text-xs whitespace-nowrap bg-surface-container text-on-surface-variant hover:text-on-surface border border-outline-variant transition-colors';
-        btn.textContent = g;
-        btn.onclick = () => {
-          selectedGenre = g;
-          updatePills();
-          renderCatalogGrid();
-        };
-        container.appendChild(btn);
-      }
-
-      function updatePills() {
-        container.querySelectorAll('button').forEach(b => {
-          const match = (b.textContent === 'Semua Genre' && selectedGenre === 'Semua') || b.textContent === selectedGenre;
-          b.className = `px-3 py-1 rounded-full text-xs whitespace-nowrap transition-colors border ${match ? 'bg-surface-container-high text-primary border-primary font-semibold' : 'bg-surface-container text-on-surface-variant hover:text-on-surface border-outline-variant'}`;
-        });
-      }
-    }
-
     async function main() {
       const status = $('#home-status');
       try {
@@ -525,11 +562,9 @@
         status.hidden = true;
         $('#comic-count-badge').textContent = `${allComics.length} Judul`;
         $('#hero-spotlight').hidden = false;
-        $('#filter-hub').hidden = false;
         $('#catalog-container').hidden = false;
 
         renderSpotlight(allComics[0]);
-        renderGenrePills();
         renderCatalogGrid();
         renderSidebarWidgets();
       } catch (e) {
@@ -537,20 +572,10 @@
       }
     }
 
-    // Type buttons
-    document.querySelectorAll('.type-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        selectedType = btn.dataset.type;
-        document.querySelectorAll('.type-btn').forEach(b => {
-          b.className = b === btn
-            ? 'type-btn px-3 py-1 rounded-lg bg-primary-container text-white text-xs font-semibold'
-            : 'type-btn px-3 py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant text-xs transition-colors border border-outline-variant';
-        });
-        renderCatalogGrid();
-      });
+    $('#sort-select').addEventListener('change', () => {
+      currentPage = 1;
+      renderCatalogGrid();
     });
-
-    $('#sort-select').addEventListener('change', renderCatalogGrid);
 
     document.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
