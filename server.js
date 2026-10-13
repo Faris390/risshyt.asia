@@ -103,4 +103,8 @@ app.use((err, req, res, next) => {
   res.status(err.status || 502).json({ error: err.message });
 });
 
-app.listen(PORT, HOST, () => console.log(`Server jalan di http://${HOST}:${PORT}`));
+if (require.main === module) {
+  app.listen(PORT, HOST, () => console.log(`Server jalan di http://${HOST}:${PORT}`));
+}
+
+module.exports = app;
