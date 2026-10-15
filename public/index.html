@@ -81,7 +81,7 @@
   <header class="bg-surface-container-low sticky top-0 z-50 border-b border-outline-variant">
     <div class="w-full px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4 max-w-[1440px] mx-auto">
       <div class="flex items-center gap-6">
-        <a class="flex items-center gap-2" href="/index.html">
+        <a class="flex items-center gap-2" href="/">
           <span
             class="w-7 h-7 rounded bg-primary-container flex items-center justify-center text-white text-sm font-bold">C</span>
           <span class="font-bold tracking-tight text-lg text-on-surface">comicshyt</span>
@@ -106,17 +106,17 @@
       <!-- Navigation Links -->
       <nav class="hidden md:flex items-center space-x-6 h-16">
         <a class="h-full flex items-center px-1 text-sm font-semibold border-b-2 border-primary-container text-primary"
-          href="/index.html">Home</a>
+          href="/">Home</a>
         <a class="h-full flex items-center px-1 text-sm text-on-surface-variant hover:text-on-surface transition-colors"
-          href="/browse.html">Browse</a>
+          href="/browse">Browse</a>
         <a class="h-full flex items-center px-1 text-sm text-on-surface-variant hover:text-on-surface transition-colors"
-          href="/rankings.html">Rankings</a>
+          href="/rankings">Rankings</a>
         <a class="h-full flex items-center px-1 text-sm text-on-surface-variant hover:text-on-surface transition-colors"
-          href="/library.html">Library</a>
+          href="/library">Library</a>
       </nav>
 
       <div class="flex items-center gap-3">
-        <a href="/library.html"
+        <a href="/library"
           class="p-2 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors"
           title="Library">
           <span class="material-symbols-outlined text-[20px]">collections_bookmark</span>
@@ -164,7 +164,7 @@
               <span
                 class="material-symbols-outlined absolute right-2 text-outline text-[16px] pointer-events-none">expand_more</span>
             </div>
-            <a href="/browse.html" class="text-xs font-semibold text-primary hover:underline flex items-center gap-0.5">
+            <a href="/browse" class="text-xs font-semibold text-primary hover:underline flex items-center gap-0.5">
               Jelajah
               <span class="material-symbols-outlined text-[16px]">chevron_right</span>
             </a>
@@ -205,7 +205,7 @@
               style="font-variation-settings: 'FILL' 1;">leaderboard</span>
           </div>
           <div id="top-comics-list" class="space-y-3"></div>
-          <a href="/rankings.html"
+          <a href="/rankings"
             class="w-full py-2 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface text-xs font-semibold flex items-center justify-center transition-colors border border-outline-variant">
             Buka Papan Peringkat Lengkap
           </a>
@@ -217,19 +217,19 @@
   <!-- Mobile Bottom Nav -->
   <nav
     class="md:hidden fixed bottom-0 left-0 w-full z-50 flex items-center justify-around px-4 py-2 bg-surface-container-low/95 backdrop-blur-md border-t border-outline-variant">
-    <a href="/index.html" class="flex flex-col items-center gap-1 text-primary font-bold text-xs py-1">
+    <a href="/" class="flex flex-col items-center gap-1 text-primary font-bold text-xs py-1">
       <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">home</span>
       <span>Home</span>
     </a>
-    <a href="/browse.html" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
+    <a href="/browse" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
       <span class="material-symbols-outlined text-[20px]">explore</span>
       <span>Browse</span>
     </a>
-    <a href="/rankings.html" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
+    <a href="/rankings" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
       <span class="material-symbols-outlined text-[20px]">leaderboard</span>
       <span>Rankings</span>
     </a>
-    <a href="/library.html" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
+    <a href="/library" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
       <span class="material-symbols-outlined text-[20px]">collections_bookmark</span>
       <span>Library</span>
     </a>
@@ -277,7 +277,7 @@
       const rating = m.user_rate ? Number(m.user_rate).toFixed(2) : '4.90';
       const genres = (m.taxonomy?.Genre || []).slice(0, 4);
 
-      el.href = `chapters.html?manga=${m.manga_id}`;
+      el.href = `/chapters?manga=${m.manga_id}`;
       el.innerHTML = `
     <div class="grid grid-cols-1 lg:grid-cols-12 min-h-[360px] lg:h-[400px]">
       <div class="lg:col-span-7 p-6 lg:p-8 flex flex-col justify-between z-10 bg-gradient-to-r from-surface-container-low via-surface-container-low/95 to-transparent">
@@ -347,7 +347,7 @@
         const card = document.createElement('article');
         card.className = 'group flex flex-col bg-surface-container-low rounded-xl overflow-hidden border border-outline-variant hover:border-primary-container transition-all';
         card.innerHTML = `
-      <a href="chapters.html?manga=${c.manga_id}" class="relative aspect-[3/4] overflow-hidden bg-surface-container block">
+      <a href="/chapters?manga=${c.manga_id}" class="relative aspect-[3/4] overflow-hidden bg-surface-container block">
         ${cover ? `<img src="${cover}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" referrerpolicy="no-referrer" loading="lazy">` : `<div class="w-full h-full flex items-center justify-center text-outline"><span class="material-symbols-outlined text-3xl">menu_book</span></div>`}
         <div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent opacity-80"></div>
         <span class="absolute top-2 left-2 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase bg-primary-container text-white shadow">
@@ -363,14 +363,14 @@
       </a>
       <div class="p-3 flex flex-col justify-between flex-1 gap-2">
         <div>
-          <a href="chapters.html?manga=${c.manga_id}" class="font-bold text-sm text-on-surface group-hover:text-primary transition-colors line-clamp-1" title="${title}">
+          <a href="/chapters?manga=${c.manga_id}" class="font-bold text-sm text-on-surface group-hover:text-primary transition-colors line-clamp-1" title="${title}">
             ${title}
           </a>
           <p class="text-[11px] text-outline truncate">${esc(genres)}</p>
         </div>
         <div class="flex items-center justify-between pt-2 border-t border-outline-variant/60 text-xs">
           <span class="text-primary font-semibold">${latestCh}</span>
-          ${p ? `<a href="reader.html?id=${p.chapterId}&manga=${c.manga_id}" class="text-[11px] text-primary hover:underline font-bold">Lanjut</a>` : `<span class="text-[11px] text-outline">Koleksi</span>`}
+          ${p ? `<a href="/reader?id=${p.chapterId}&manga=${c.manga_id}" class="text-[11px] text-primary hover:underline font-bold">Lanjut</a>` : `<span class="text-[11px] text-outline">Koleksi</span>`}
         </div>
       </div>
     `;
@@ -494,7 +494,7 @@
         <h4 class="font-bold text-xs text-on-surface truncate">${esc(comic.title)}</h4>
         <p class="text-[11px] text-on-surface-variant">Chapter ${esc(p.number)}</p>
       </div>
-      <a href="reader.html?id=${p.chapterId}&manga=${comic.manga_id}" class="p-1.5 rounded-lg text-primary hover:bg-surface-container-high transition-colors" title="Lanjut">
+      <a href="/reader?id=${p.chapterId}&manga=${comic.manga_id}" class="p-1.5 rounded-lg text-primary hover:bg-surface-container-high transition-colors" title="Lanjut">
         <span class="material-symbols-outlined text-[18px]">play_circle</span>
       </a>
     `;
@@ -510,7 +510,7 @@
       sorted.forEach((c, idx) => {
         const cover = c.cover_portrait_url || c.cover_image_url || '';
         const item = document.createElement('a');
-        item.href = `chapters.html?manga=${c.manga_id}`;
+        item.href = `/chapters?manga=${c.manga_id}`;
         item.className = 'flex items-center gap-3 group cursor-pointer';
         item.innerHTML = `
       <span class="w-5 text-sm font-extrabold ${idx === 0 ? 'text-primary-container' : 'text-outline'} text-center">0${idx + 1}</span>

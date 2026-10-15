@@ -52,7 +52,7 @@
   <!-- Top Floating Bar -->
   <header id="bar" class="fixed top-0 inset-x-0 z-50 bg-surface-container-low/95 backdrop-blur-md border-b border-outline-variant bar-transition">
     <div class="max-w-[840px] mx-auto px-4 h-14 flex items-center justify-between gap-3 text-sm">
-      <a id="back" href="/library.html" class="flex items-center gap-1.5 text-on-surface-variant hover:text-on-surface transition-colors py-1">
+      <a id="back" href="/library" class="flex items-center gap-1.5 text-on-surface-variant hover:text-on-surface transition-colors py-1">
         <span class="material-symbols-outlined text-[18px]">arrow_back</span>
         <span class="hidden sm:inline font-medium">Kembali</span>
       </a>
@@ -117,13 +117,13 @@ function setStatus(msg, isError = false) {
 }
 
 function setNav(prevId, nextId) {
-  const link = (id) => id ? `reader.html?id=${id}${mangaId ? `&manga=${mangaId}` : ''}` : '#';
+  const link = (id) => id ? `/reader?id=${id}${mangaId ? `&manga=${mangaId}` : ''}` : '#';
   for (const [sel, id] of [['#prevTop', prevId], ['#prevBot', prevId], ['#nextTop', nextId], ['#nextBot', nextId]]) {
     const a = $(sel);
     a.href = link(id);
     a.setAttribute('aria-disabled', id ? 'false' : 'true');
   }
-  if (mangaId) $('#back').href = `chapters.html?manga=${mangaId}`;
+  if (mangaId) $('#back').href = `/chapters?manga=${mangaId}`;
 }
 
 let chapter = null;
@@ -184,9 +184,19 @@ async function load() {
 function saveProgress() {
   if (!mangaId) return;
   try {
+    // Simpan progress terakhir
     const all = JSON.parse(localStorage.getItem('progress') || '{}');
     all[mangaId] = { chapterId, number: chapter.number, at: Date.now() };
     localStorage.setItem('progress', JSON.stringify(all));
+
+    // Simpan history chapter yang sudah dibaca
+    const history = JSON.parse(localStorage.getItem('readHistory') || '{}');
+    if (!history[mangaId]) history[mangaId] = {};
+    history[mangaId][chapterId] = {
+      number: chapter.number,
+      at: Date.now()
+    };
+    localStorage.setItem('readHistory', JSON.stringify(history));
   } catch {}
 }
 

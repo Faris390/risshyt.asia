@@ -49,8 +49,25 @@ function upstream(p) {
 // ---------- app ----------
 const app = express();
 
-// Redirect root ke /index.html
-app.get('/', (req, res) => res.redirect('/index.html'));
+// Redirect /something.html → /something (clean URL)
+app.get('*.html', (req, res) => {
+  const clean = req.path.replace(/\.html$/, '');
+  // /index.html → /
+  res.redirect(301, clean === '/index' ? '/' : clean);
+});
+
+// Clean URL: serve /browse → browse.html, etc.
+const PAGES = ['browse', 'library', 'rankings', 'chapters', 'reader'];
+for (const page of PAGES) {
+  app.get(`/${page}`, (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', `${page}.html`));
+  });
+}
+
+// Root → index.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 app.use(express.static(path.join(__dirname, 'public')));
 

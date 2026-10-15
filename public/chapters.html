@@ -49,7 +49,7 @@
   <!-- Top Navigation Header -->
   <header class="bg-surface-container-low sticky top-0 z-50 border-b border-outline-variant">
     <div class="max-w-[1000px] mx-auto px-4 h-16 flex items-center justify-between">
-      <a href="/library.html" class="flex items-center gap-2 text-on-surface-variant hover:text-on-surface transition-colors">
+      <a href="/library" class="flex items-center gap-2 text-on-surface-variant hover:text-on-surface transition-colors">
         <span class="material-symbols-outlined text-[20px]">arrow_back</span>
         <span class="font-semibold text-sm">Kembali ke Perpustakaan</span>
       </a>
@@ -65,6 +65,24 @@
     <div id="status" class="py-8 text-center text-on-surface-variant">Memuat detail komik…</div>
 
     <div id="list-area" class="mt-8 space-y-4" hidden>
+      <!-- Reading Progress Bar -->
+      <div id="read-progress-section" class="bg-surface-container-low rounded-2xl border border-outline-variant p-4 sm:p-5" hidden>
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-[20px] text-emerald-400" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+            <span class="text-sm font-bold text-on-surface">Progress Bacaan</span>
+          </div>
+          <span id="read-progress-text" class="text-xs font-semibold text-on-surface-variant"></span>
+        </div>
+        <div class="w-full bg-surface-container-highest rounded-full h-2 overflow-hidden">
+          <div id="read-progress-bar" class="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-all duration-500 ease-out" style="width: 0%"></div>
+        </div>
+        <div class="flex items-center justify-between mt-2 text-[11px] text-outline">
+          <span id="read-count-label">0 chapter dibaca</span>
+          <span id="read-percent-label">0%</span>
+        </div>
+      </div>
+
       <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pb-3 border-b border-outline-variant">
         <h2 class="text-lg font-bold text-on-surface flex items-center gap-2 self-start sm:self-auto">
           <span class="material-symbols-outlined text-primary-container">format_list_bulleted</span>
@@ -86,6 +104,19 @@
         </div>
       </div>
 
+      <!-- Filter tabs: Semua / Sudah Dibaca / Belum Dibaca -->
+      <div id="read-filter-tabs" class="flex items-center gap-1.5 overflow-x-auto pb-1" hidden>
+        <button data-filter="all" class="read-filter-btn px-3 py-1.5 rounded-lg bg-primary-container text-white text-xs font-semibold transition-all shadow-sm">Semua</button>
+        <button data-filter="read" class="read-filter-btn px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant text-xs transition-colors border border-outline-variant hover:text-on-surface flex items-center gap-1">
+          <span class="material-symbols-outlined text-[14px] text-emerald-400" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+          Sudah Dibaca
+        </button>
+        <button data-filter="unread" class="read-filter-btn px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant text-xs transition-colors border border-outline-variant hover:text-on-surface flex items-center gap-1">
+          <span class="material-symbols-outlined text-[14px] text-outline">radio_button_unchecked</span>
+          Belum Dibaca
+        </button>
+      </div>
+
       <ul id="list" class="divide-y divide-outline-variant/60 bg-surface-container-low rounded-xl border border-outline-variant overflow-hidden"></ul>
     </div>
   </main>
@@ -98,8 +129,10 @@ const $ = (s) => document.querySelector(s);
 let chapters = [];
 let newestFirst = true;
 let lastRead = null;
+let readHistory = {};
+let readFilter = 'all'; // 'all' | 'read' | 'unread'
 
-const readerUrl = (c) => `reader.html?id=${c.chapter_id}&manga=${mangaId}`;
+const readerUrl = (c) => `/reader?id=${c.chapter_id}&manga=${mangaId}`;
 const fmtDate = (s) => s ? new Date(s).toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' }) : '';
 
 function renderInfo(m) {
@@ -140,7 +173,7 @@ function renderActions() {
 
   if (lastRead) {
     container.innerHTML = `
-      <a href="reader.html?id=${lastRead.chapterId}&manga=${mangaId}" class="px-5 py-2.5 bg-primary-container hover:bg-opacity-90 text-white rounded-xl font-semibold text-sm transition-colors flex items-center gap-2 shadow-sm">
+      <a href="/reader?id=${lastRead.chapterId}&manga=${mangaId}" class="px-5 py-2.5 bg-primary-container hover:bg-opacity-90 text-white rounded-xl font-semibold text-sm transition-colors flex items-center gap-2 shadow-sm">
         <span class="material-symbols-outlined text-[18px]">play_arrow</span>
         <span>Lanjut Baca Ch. ${lastRead.number}</span>
       </a>
@@ -158,10 +191,38 @@ function renderActions() {
   }
 }
 
+function renderReadProgress() {
+  const total = chapters.length;
+  const readCount = chapters.filter(c => readHistory[c.chapter_id]).length;
+  const pct = total > 0 ? Math.round((readCount / total) * 100) : 0;
+
+  const section = $('#read-progress-section');
+  const filterTabs = $('#read-filter-tabs');
+
+  if (readCount > 0) {
+    section.hidden = false;
+    filterTabs.hidden = false;
+    $('#read-progress-bar').style.width = `${pct}%`;
+    $('#read-progress-text').textContent = `${readCount} / ${total} chapter`;
+    $('#read-count-label').textContent = `${readCount} chapter dibaca`;
+    $('#read-percent-label').textContent = `${pct}%`;
+  } else {
+    section.hidden = true;
+    filterTabs.hidden = true;
+  }
+}
+
 function renderList() {
   const term = $('#q').value.trim();
   let rows = newestFirst ? chapters : [...chapters].reverse();
   if (term) rows = rows.filter(c => String(c.chapter_number).includes(term));
+
+  // Filter berdasarkan status baca
+  if (readFilter === 'read') {
+    rows = rows.filter(c => readHistory[c.chapter_id]);
+  } else if (readFilter === 'unread') {
+    rows = rows.filter(c => !readHistory[c.chapter_id]);
+  }
 
   const ul = $('#list');
   ul.replaceChildren();
@@ -169,6 +230,7 @@ function renderList() {
 
   for (const c of rows) {
     const isCurrent = lastRead && lastRead.chapterId === c.chapter_id;
+    const isRead = !!readHistory[c.chapter_id];
     const li = document.createElement('li');
     li.className = `transition-colors hover:bg-surface-container ${isCurrent ? 'bg-primary-container/10 border-l-4 border-primary-container' : ''}`;
 
@@ -178,19 +240,37 @@ function renderList() {
 
     const left = document.createElement('div');
     left.className = 'flex items-center gap-2 min-w-0';
+
+    // Icon: bookmark untuk current, check untuk sudah dibaca, circle untuk belum
     if (isCurrent) {
       left.innerHTML = `<span class="material-symbols-outlined text-primary text-[18px]">bookmark</span>`;
+    } else if (isRead) {
+      left.innerHTML = `<span class="material-symbols-outlined text-emerald-400 text-[18px]" style="font-variation-settings: 'FILL' 1;">check_circle</span>`;
+    } else {
+      left.innerHTML = `<span class="material-symbols-outlined text-outline/40 text-[18px]">radio_button_unchecked</span>`;
     }
+
     const titleSpan = document.createElement('span');
-    titleSpan.className = `font-semibold truncate ${isCurrent ? 'text-primary' : 'text-on-surface'}`;
+    titleSpan.className = `font-semibold truncate ${isCurrent ? 'text-primary' : isRead ? 'text-on-surface-variant/60' : 'text-on-surface'}`;
     titleSpan.textContent = `Chapter ${c.chapter_number}${c.chapter_title ? ` — ${c.chapter_title}` : ''}`;
     left.appendChild(titleSpan);
 
-    const dateSpan = document.createElement('span');
-    dateSpan.className = 'text-xs text-outline flex-shrink-0 ml-3';
-    dateSpan.textContent = fmtDate(c.release_date);
+    const right = document.createElement('div');
+    right.className = 'flex items-center gap-2 flex-shrink-0 ml-3';
 
-    a.append(left, dateSpan);
+    if (isRead && !isCurrent) {
+      const badge = document.createElement('span');
+      badge.className = 'hidden sm:inline-flex px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
+      badge.textContent = 'Dibaca';
+      right.appendChild(badge);
+    }
+
+    const dateSpan = document.createElement('span');
+    dateSpan.className = `text-xs flex-shrink-0 ${isRead ? 'text-outline/50' : 'text-outline'}`;
+    dateSpan.textContent = fmtDate(c.release_date);
+    right.appendChild(dateSpan);
+
+    a.append(left, right);
     li.appendChild(a);
     frag.appendChild(li);
   }
@@ -200,7 +280,7 @@ function renderList() {
   if (!rows.length) {
     const emptyLi = document.createElement('li');
     emptyLi.className = 'py-6 text-center text-sm text-outline';
-    emptyLi.textContent = 'Tidak ada chapter yang cocok.';
+    emptyLi.textContent = readFilter === 'read' ? 'Belum ada chapter yang dibaca.' : readFilter === 'unread' ? 'Semua chapter sudah dibaca! 🎉' : 'Tidak ada chapter yang cocok.';
     ul.appendChild(emptyLi);
   }
 }
@@ -215,6 +295,9 @@ async function main() {
   try {
     lastRead = (JSON.parse(localStorage.getItem('progress') || '{}'))[mangaId] || null;
   } catch { lastRead = null; }
+  try {
+    readHistory = (JSON.parse(localStorage.getItem('readHistory') || '{}'))[mangaId] || {};
+  } catch { readHistory = {}; }
 
   try {
     const [mRes, cRes] = await Promise.all([
@@ -229,6 +312,7 @@ async function main() {
     chapters = c.data;
     $('#chapter-count').textContent = `${chapters.length} chapter`;
     renderActions();
+    renderReadProgress();
 
     status.hidden = true;
     $('#list-area').hidden = false;
@@ -244,6 +328,19 @@ $('#sort').addEventListener('click', () => {
   newestFirst = !newestFirst;
   $('#sort-text').textContent = newestFirst ? 'Terbaru' : 'Terlama';
   renderList();
+});
+
+// Filter tabs: Semua / Sudah Dibaca / Belum Dibaca
+document.querySelectorAll('.read-filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    readFilter = btn.dataset.filter;
+    document.querySelectorAll('.read-filter-btn').forEach(b => {
+      b.className = b === btn
+        ? 'read-filter-btn px-3 py-1.5 rounded-lg bg-primary-container text-white text-xs font-semibold transition-all shadow-sm'
+        : 'read-filter-btn px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant text-xs transition-colors border border-outline-variant hover:text-on-surface flex items-center gap-1';
+    });
+    renderList();
+  });
 });
 
 main();

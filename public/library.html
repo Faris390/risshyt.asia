@@ -64,7 +64,7 @@
     <div class="w-full px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4 max-w-[1440px] mx-auto">
       <!-- Brand & Search Bar -->
       <div class="flex items-center gap-6">
-        <a class="flex items-center gap-2" href="/library.html">
+        <a class="flex items-center gap-2" href="/library">
           <span class="w-7 h-7 rounded bg-primary-container flex items-center justify-center text-white text-sm font-bold">C</span>
           <span class="font-bold tracking-tight text-lg text-on-surface">comicshyt</span>
         </a>
@@ -80,14 +80,14 @@
 
       <!-- Navigation Links -->
       <nav class="hidden md:flex items-center space-x-6 h-16">
-        <a class="h-full flex items-center px-1 text-sm text-on-surface-variant hover:text-on-surface transition-colors" href="/index.html">Home</a>
-        <a class="h-full flex items-center px-1 text-sm text-on-surface-variant hover:text-on-surface transition-colors" href="/browse.html">Browse</a>
-        <a class="h-full flex items-center px-1 text-sm text-on-surface-variant hover:text-on-surface transition-colors" href="/rankings.html">Rankings</a>
-        <a class="h-full flex items-center px-1 text-sm font-semibold border-b-2 border-primary-container text-primary" href="/library.html">Library</a>
+        <a class="h-full flex items-center px-1 text-sm text-on-surface-variant hover:text-on-surface transition-colors" href="/">Home</a>
+        <a class="h-full flex items-center px-1 text-sm text-on-surface-variant hover:text-on-surface transition-colors" href="/browse">Browse</a>
+        <a class="h-full flex items-center px-1 text-sm text-on-surface-variant hover:text-on-surface transition-colors" href="/rankings">Rankings</a>
+        <a class="h-full flex items-center px-1 text-sm font-semibold border-b-2 border-primary-container text-primary" href="/library">Library</a>
       </nav>
 
       <div class="flex items-center gap-3">
-        <a href="/library.html" class="p-2 rounded-xl text-primary bg-surface-container-high transition-colors" title="Library">
+        <a href="/library" class="p-2 rounded-xl text-primary bg-surface-container-high transition-colors" title="Library">
           <span class="material-symbols-outlined text-[20px]">collections_bookmark</span>
         </a>
       </div>
@@ -153,19 +153,19 @@
 
   <!-- Mobile Bottom Nav -->
   <nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex items-center justify-around px-4 py-2 bg-surface-container-low/95 backdrop-blur-md border-t border-outline-variant">
-    <a href="/index.html" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
+    <a href="/" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
       <span class="material-symbols-outlined text-[20px]">home</span>
       <span>Home</span>
     </a>
-    <a href="/browse.html" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
+    <a href="/browse" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
       <span class="material-symbols-outlined text-[20px]">explore</span>
       <span>Browse</span>
     </a>
-    <a href="/rankings.html" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
+    <a href="/rankings" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
       <span class="material-symbols-outlined text-[20px]">leaderboard</span>
       <span>Rankings</span>
     </a>
-    <a href="/library.html" class="flex flex-col items-center gap-1 text-primary font-bold text-xs py-1">
+    <a href="/library" class="flex flex-col items-center gap-1 text-primary font-bold text-xs py-1">
       <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">collections_bookmark</span>
       <span>Library</span>
     </a>
@@ -250,11 +250,11 @@ function renderHeroProgress(comic, prog) {
           </div>
         </div>
         <div class="flex items-center gap-3 mt-4 pt-3 border-t border-outline-variant/40">
-          <a href="reader.html?id=${prog.chapterId}&manga=${comic.manga_id}" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary-container hover:bg-opacity-90 text-white text-sm font-semibold rounded-xl transition-all shadow-sm">
+          <a href="/reader?id=${prog.chapterId}&manga=${comic.manga_id}" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-primary-container hover:bg-opacity-90 text-white text-sm font-semibold rounded-xl transition-all shadow-sm">
             <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
             <span>Lanjut Baca Ch. ${chapterNumber}</span>
           </a>
-          <a href="chapters.html?manga=${comic.manga_id}" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-surface-container hover:bg-surface-container-high text-on-surface border border-outline-variant text-sm font-medium rounded-xl transition-colors">
+          <a href="/chapters?manga=${comic.manga_id}" class="inline-flex items-center gap-1.5 px-4 py-2.5 bg-surface-container hover:bg-surface-container-high text-on-surface border border-outline-variant text-sm font-medium rounded-xl transition-colors">
             <span>Daftar Chapter</span>
           </a>
         </div>
@@ -275,7 +275,7 @@ function createComicCard(comic, prog) {
   card.className = 'group relative bg-surface-container-low rounded-xl border border-outline-variant overflow-hidden hover:border-primary-container/80 transition-all duration-200 flex flex-col';
 
   card.innerHTML = `
-    <a href="chapters.html?manga=${comic.manga_id}" class="relative aspect-[3/4] w-full overflow-hidden bg-surface-container block">
+    <a href="/chapters?manga=${comic.manga_id}" class="relative aspect-[3/4] w-full overflow-hidden bg-surface-container block">
       ${cover ? `<img src="${cover}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" referrerpolicy="no-referrer" loading="lazy">` : `<div class="w-full h-full flex items-center justify-center text-outline"><span class="material-symbols-outlined text-4xl">menu_book</span></div>`}
       <div class="absolute inset-0 bg-gradient-to-t from-surface-dim via-transparent to-transparent opacity-90"></div>
       
@@ -298,7 +298,7 @@ function createComicCard(comic, prog) {
 
     <div class="p-3 flex-1 flex flex-col justify-between">
       <div>
-        <a href="chapters.html?manga=${comic.manga_id}" class="font-bold text-sm text-on-surface hover:text-primary transition-colors line-clamp-1" title="${title}">
+        <a href="/chapters?manga=${comic.manga_id}" class="font-bold text-sm text-on-surface hover:text-primary transition-colors line-clamp-1" title="${title}">
           ${title}
         </a>
         <div class="flex items-center justify-between text-xs text-on-surface-variant mt-1">
@@ -309,12 +309,12 @@ function createComicCard(comic, prog) {
 
       <div class="mt-3 pt-2 border-t border-outline-variant/50 flex items-center justify-between">
         ${prog ? `
-          <a href="reader.html?id=${prog.chapterId}&manga=${comic.manga_id}" class="px-2.5 py-1 bg-primary-container text-white rounded-lg text-xs font-semibold hover:opacity-90 transition-opacity flex items-center gap-1 shadow-sm">
+          <a href="/reader?id=${prog.chapterId}&manga=${comic.manga_id}" class="px-2.5 py-1 bg-primary-container text-white rounded-lg text-xs font-semibold hover:opacity-90 transition-opacity flex items-center gap-1 shadow-sm">
             <span>Lanjut</span>
             <span class="material-symbols-outlined text-[13px]">play_arrow</span>
           </a>
         ` : `
-          <a href="chapters.html?manga=${comic.manga_id}" class="px-2.5 py-1 bg-surface-container hover:bg-surface-container-high text-on-surface rounded-lg text-xs font-medium transition-colors border border-outline-variant flex items-center gap-1">
+          <a href="/chapters?manga=${comic.manga_id}" class="px-2.5 py-1 bg-surface-container hover:bg-surface-container-high text-on-surface rounded-lg text-xs font-medium transition-colors border border-outline-variant flex items-center gap-1">
             <span>Buka</span>
             <span class="material-symbols-outlined text-[13px]">arrow_forward</span>
           </a>

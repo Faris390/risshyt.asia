@@ -56,7 +56,7 @@
   <header class="bg-surface-container-low sticky top-0 z-50 border-b border-outline-variant">
     <div class="w-full px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4 max-w-[1440px] mx-auto">
       <div class="flex items-center gap-6">
-        <a class="flex items-center gap-2" href="/index.html">
+        <a class="flex items-center gap-2" href="/">
           <span class="w-7 h-7 rounded bg-primary-container flex items-center justify-center text-white text-sm font-bold">C</span>
           <span class="font-bold tracking-tight text-lg text-on-surface">comicshyt</span>
         </a>
@@ -64,14 +64,14 @@
 
       <!-- Navigation Links -->
       <nav class="hidden md:flex items-center space-x-6 h-16">
-        <a class="h-full flex items-center px-1 text-sm text-on-surface-variant hover:text-on-surface transition-colors" href="/index.html">Home</a>
-        <a class="h-full flex items-center px-1 text-sm font-semibold border-b-2 border-primary-container text-primary" href="/browse.html">Browse</a>
-        <a class="h-full flex items-center px-1 text-sm text-on-surface-variant hover:text-on-surface transition-colors" href="/rankings.html">Rankings</a>
-        <a class="h-full flex items-center px-1 text-sm text-on-surface-variant hover:text-on-surface transition-colors" href="/library.html">Library</a>
+        <a class="h-full flex items-center px-1 text-sm text-on-surface-variant hover:text-on-surface transition-colors" href="/">Home</a>
+        <a class="h-full flex items-center px-1 text-sm font-semibold border-b-2 border-primary-container text-primary" href="/browse">Browse</a>
+        <a class="h-full flex items-center px-1 text-sm text-on-surface-variant hover:text-on-surface transition-colors" href="/rankings">Rankings</a>
+        <a class="h-full flex items-center px-1 text-sm text-on-surface-variant hover:text-on-surface transition-colors" href="/library">Library</a>
       </nav>
 
       <div class="flex items-center gap-3">
-        <a href="/library.html" class="p-2 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" title="Library">
+        <a href="/library" class="p-2 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" title="Library">
           <span class="material-symbols-outlined text-[20px]">collections_bookmark</span>
         </a>
       </div>
@@ -185,19 +185,19 @@
 
   <!-- Mobile Bottom Nav -->
   <nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex items-center justify-around px-4 py-2 bg-surface-container-low/95 backdrop-blur-md border-t border-outline-variant">
-    <a href="/index.html" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
+    <a href="/" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
       <span class="material-symbols-outlined text-[20px]">home</span>
       <span>Home</span>
     </a>
-    <a href="/browse.html" class="flex flex-col items-center gap-1 text-primary font-bold text-xs py-1">
+    <a href="/browse" class="flex flex-col items-center gap-1 text-primary font-bold text-xs py-1">
       <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">explore</span>
       <span>Browse</span>
     </a>
-    <a href="/rankings.html" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
+    <a href="/rankings" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
       <span class="material-symbols-outlined text-[20px]">leaderboard</span>
       <span>Rankings</span>
     </a>
-    <a href="/library.html" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
+    <a href="/library" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
       <span class="material-symbols-outlined text-[20px]">collections_bookmark</span>
       <span>Library</span>
     </a>
@@ -302,7 +302,7 @@ function renderCatalog() {
       const card = document.createElement('article');
       card.className = 'group flex flex-col bg-surface-container-low rounded-xl overflow-hidden border border-outline-variant hover:border-primary-container transition-all';
       card.innerHTML = `
-        <a href="chapters.html?manga=${c.manga_id}" class="relative aspect-[3/4] overflow-hidden bg-surface-container block">
+        <a href="/chapters?manga=${c.manga_id}" class="relative aspect-[3/4] overflow-hidden bg-surface-container block">
           ${cover ? `<img src="${cover}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" referrerpolicy="no-referrer" loading="lazy">` : `<div class="w-full h-full flex items-center justify-center text-outline"><span class="material-symbols-outlined text-3xl">menu_book</span></div>`}
           <span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-surface-container-lowest/90 backdrop-blur-sm text-secondary text-[10px] font-semibold border border-outline-variant/60">
             ${type}
@@ -313,12 +313,12 @@ function renderCatalog() {
           </div>
         </a>
         <div class="p-3 flex flex-col justify-between flex-1 gap-1.5">
-          <a href="chapters.html?manga=${c.manga_id}" class="font-bold text-xs sm:text-sm text-on-surface group-hover:text-primary transition-colors line-clamp-1" title="${title}">
+          <a href="/chapters?manga=${c.manga_id}" class="font-bold text-xs sm:text-sm text-on-surface group-hover:text-primary transition-colors line-clamp-1" title="${title}">
             ${title}
           </a>
           <div class="flex items-center justify-between text-xs pt-1 border-t border-outline-variant/50">
             <span class="text-primary font-semibold text-[11px]">${latestCh}</span>
-            <a href="chapters.html?manga=${c.manga_id}" class="text-[11px] text-outline hover:text-on-surface font-semibold">Detail</a>
+            <a href="/chapters?manga=${c.manga_id}" class="text-[11px] text-outline hover:text-on-surface font-semibold">Detail</a>
           </div>
         </div>
       `;
@@ -345,7 +345,7 @@ function renderCatalog() {
         <div class="flex flex-col justify-between flex-grow min-w-0 py-0.5">
           <div>
             <div class="flex items-start justify-between gap-2">
-              <a href="chapters.html?manga=${c.manga_id}" class="font-bold text-sm sm:text-base text-on-surface truncate group-hover:text-primary transition-colors">${title}</a>
+              <a href="/chapters?manga=${c.manga_id}" class="font-bold text-sm sm:text-base text-on-surface truncate group-hover:text-primary transition-colors">${title}</a>
               <span class="flex items-center gap-0.5 text-amber-400 text-xs font-bold flex-shrink-0">
                 <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span> ${rate}
               </span>
@@ -358,7 +358,7 @@ function renderCatalog() {
           </div>
           <div class="flex items-center justify-between pt-2 border-t border-outline-variant/60 mt-2 text-xs">
             <span class="text-on-surface font-semibold">${latestCh ? `Rilis: ${latestCh}` : ''}</span>
-            <a href="chapters.html?manga=${c.manga_id}" class="px-3 py-1 bg-primary-container text-white text-xs font-semibold rounded-lg hover:opacity-90 transition-opacity flex items-center gap-1">
+            <a href="/chapters?manga=${c.manga_id}" class="px-3 py-1 bg-primary-container text-white text-xs font-semibold rounded-lg hover:opacity-90 transition-opacity flex items-center gap-1">
               <span>Buka</span>
               <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
             </a>
