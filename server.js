@@ -69,8 +69,6 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-app.use(express.static(path.join(__dirname, 'public')));
-
 function checkId(req, res, next) {
   if (!UUID.test(req.params.id)) return res.status(400).json({ error: 'id tidak valid' });
   next();
@@ -114,6 +112,9 @@ app.get('/img', wrap(async (req, res) => {
   res.set('Cache-Control', 'public, max-age=86400');
   Readable.fromWeb(r.body).pipe(res);
 }));
+
+// Static files (harus setelah API routes agar /api/* tidak tershadow)
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((err, req, res, next) => {
   console.error(err.message);
