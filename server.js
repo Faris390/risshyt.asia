@@ -50,7 +50,7 @@ function upstream(p) {
 const app = express();
 
 // Redirect /something.html → /something (clean URL)
-app.get('*.html', (req, res) => {
+app.get(/\.html$/, (req, res) => {
   const clean = req.path.replace(/\.html$/, '');
   // /index.html → /
   res.redirect(301, clean === '/index' ? '/' : clean);
