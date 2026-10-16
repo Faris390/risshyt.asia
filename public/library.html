@@ -86,11 +86,7 @@
         <a class="h-full flex items-center px-1 text-sm font-semibold border-b-2 border-primary-container text-primary" href="/library">Library</a>
       </nav>
 
-      <div class="flex items-center gap-3">
-        <a href="/library" class="p-2 rounded-xl text-primary bg-surface-container-high transition-colors" title="Library">
-          <span class="material-symbols-outlined text-[20px]">collections_bookmark</span>
-        </a>
-      </div>
+      <div class="hidden sm:flex items-center gap-3"></div>
     </div>
   </header>
 
@@ -278,7 +274,6 @@ function createComicCard(comic, prog) {
   const latestCh = comic.latest_chapter_number != null ? `Ch. ${esc(comic.latest_chapter_number)}` : '';
   const lastReadCh = prog ? `Dibaca: Ch. ${esc(prog.number)}` : null;
   const history = historyMap()[comic.manga_id] || {};
-  const marked = !!bookmarkMap()[comic.manga_id];
   const historyNumbers = Object.values(history).map(item => item.number).filter(Boolean).sort((a, b) => Number(a) - Number(b));
 
   const card = document.createElement('div');
@@ -313,9 +308,6 @@ function createComicCard(comic, prog) {
         </a>
         <div class="flex items-center justify-between text-xs text-on-surface-variant mt-1">
           <span>${lastReadCh || 'Belum dibaca'}${historyNumbers.length ? ` · Selesai: ${esc(historyNumbers.join(', '))}` : ''}</span>
-          <button type="button" data-bookmark="${comic.manga_id}" class="text-primary hover:text-on-surface" title="${marked ? 'Hapus tanda' : 'Tandai komik'}">
-            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' ${marked ? 1 : 0};">bookmark</span>
-          </button>
         </div>
       </div>
 
@@ -335,14 +327,6 @@ function createComicCard(comic, prog) {
     </div>
   `;
 
-  card.querySelector('[data-bookmark]').addEventListener('click', (event) => {
-    event.preventDefault();
-    const bookmarks = bookmarkMap();
-    if (bookmarks[comic.manga_id]) delete bookmarks[comic.manga_id];
-    else bookmarks[comic.manga_id] = { at: Date.now() };
-    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-    filterAndDisplay();
-  });
   return card;
 }
 
@@ -459,14 +443,6 @@ document.querySelectorAll('.library-tab').forEach((tab) => {
 });
 
 addEventListener('storage', filterAndDisplay);
-
-// Keyboard shortcut Ctrl+K
-document.addEventListener('keydown', (e) => {
-  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
-    e.preventDefault();
-    $('#search-input').focus();
-  }
-});
 
 main();
 </script>

@@ -79,8 +79,8 @@
 
   <!-- ================= TOP NAVIGATION BAR ================= -->
   <header class="bg-surface-container-low sticky top-0 z-50 border-b border-outline-variant">
-    <div class="w-full px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4 max-w-[1440px] mx-auto">
-      <div class="flex items-center gap-6">
+    <div class="w-full px-4 sm:px-6 lg:px-8 min-h-16 py-3 sm:py-0 flex flex-wrap items-center justify-between gap-3 max-w-[1440px] mx-auto">
+      <div class="flex flex-wrap items-center gap-3 sm:gap-6 flex-1 min-w-0">
         <a class="flex items-center gap-2" href="/">
           <span
             class="w-7 h-7 rounded bg-primary-container flex items-center justify-center text-white text-sm font-bold">C</span>
@@ -88,18 +88,13 @@
         </a>
 
         <!-- Global Search Bar -->
-        <div class="relative w-36 sm:w-56 xl:w-72">
+        <div class="relative order-3 w-full sm:order-none sm:w-56 xl:w-72">
           <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-on-surface-variant">
             <span class="material-symbols-outlined text-[18px]">search</span>
           </span>
           <input id="nav-search"
             class="w-full bg-surface-container border border-outline-variant rounded-xl pl-9 pr-12 py-1.5 text-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary-container transition-colors"
             placeholder="Cari dalam koleksi..." type="text">
-          <div class="absolute inset-y-0 right-0 pr-2.5 flex items-center pointer-events-none">
-            <kbd
-              class="px-1.5 py-0.5 text-[10px] text-outline border border-outline-variant rounded bg-surface-container-lowest">Ctrl
-              K</kbd>
-          </div>
         </div>
       </div>
 
@@ -115,7 +110,7 @@
           href="/library">Library</a>
       </nav>
 
-      <div class="flex items-center gap-3"></div>
+      <div class="hidden sm:flex items-center gap-3"></div>
     </div>
   </header>
 
@@ -256,17 +251,13 @@
       try { return JSON.parse(localStorage.getItem('progress') || '{}'); } catch { return {}; }
     }
 
-    function bookmarkMap() {
-      try { return JSON.parse(localStorage.getItem('bookmarks') || '{}'); } catch { return {}; }
-    }
-
     function relativeAge(value) {
       const time = value ? new Date(value).getTime() : 0;
       if (!time || Number.isNaN(time)) return '';
       const minutes = Math.max(0, Math.floor((Date.now() - time) / 60000));
-      if (minutes < 60) return `${minutes || 1}m`;
-      if (minutes < 1440) return `${Math.floor(minutes / 60)}h`;
-      return `${Math.floor(minutes / 1440)}d`;
+      if (minutes < 60) return `${minutes || 1}m`.toLowerCase();
+      if (minutes < 1440) return `${Math.floor(minutes / 60)}h`.toLowerCase();
+      return `${Math.floor(minutes / 1440)}d`.toLowerCase();
     }
 
     function updateDate(comic) {
@@ -356,7 +347,6 @@
       const pageItems = list.slice(startIndex, startIndex + PAGE_SIZE);
 
       const prog = progressMap();
-      const bookmarks = bookmarkMap();
 
       for (const c of pageItems) {
         const cover = c.cover_portrait_url || c.cover_image_url || '';
@@ -366,15 +356,11 @@
         const latestCh = c.latest_chapter_number != null ? `Ch. ${esc(c.latest_chapter_number)}` : '';
         const rate = c.user_rate ? Number(c.user_rate).toFixed(1) : '4.9';
         const p = prog[c.manga_id];
-        const marked = !!bookmarks[c.manga_id];
         const updated = relativeAge(updateDate(c));
 
         const card = document.createElement('article');
         card.className = 'group relative flex flex-col bg-surface-container-low rounded-xl overflow-hidden border border-outline-variant hover:border-primary-container transition-all';
         card.innerHTML = `
-      <button type="button" data-bookmark="${c.manga_id}" aria-label="${marked ? 'Hapus tanda' : 'Tandai komik'}" class="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-surface-container-lowest/90 text-primary hover:bg-primary-container hover:text-white transition-colors">
-        <span class="material-symbols-outlined text-[17px]" style="font-variation-settings: 'FILL' ${marked ? 1 : 0};">bookmark</span>
-      </button>
       <a href="/chapters?manga=${c.manga_id}" class="relative aspect-[3/4] overflow-hidden bg-surface-container block">
         ${cover ? `<img src="${cover}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" referrerpolicy="no-referrer" loading="lazy">` : `<div class="w-full h-full flex items-center justify-center text-outline"><span class="material-symbols-outlined text-3xl">menu_book</span></div>`}
         <div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent opacity-80"></div>
@@ -401,14 +387,6 @@
       </div>
     `;
         grid.appendChild(card);
-        card.querySelector('[data-bookmark]').addEventListener('click', (event) => {
-          event.stopPropagation();
-          const current = bookmarkMap();
-          if (current[c.manga_id]) delete current[c.manga_id];
-          else current[c.manga_id] = { at: Date.now() };
-          localStorage.setItem('bookmarks', JSON.stringify(current));
-          renderCatalogGrid();
-        });
       }
 
       if (!pageItems.length) {
@@ -617,8 +595,6 @@
       currentPage = 1;
       renderCatalogGrid();
     });
-
-    addEventListener('storage', () => renderCatalogGrid());
 
     document.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
