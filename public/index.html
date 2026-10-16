@@ -88,7 +88,7 @@
         </a>
 
         <!-- Global Search Bar -->
-        <div class="relative hidden xl:block w-72">
+        <div class="relative w-36 sm:w-56 xl:w-72">
           <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-on-surface-variant">
             <span class="material-symbols-outlined text-[18px]">search</span>
           </span>
@@ -115,13 +115,7 @@
           href="/library">Library</a>
       </nav>
 
-      <div class="flex items-center gap-3">
-        <a href="/library"
-          class="p-2 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors"
-          title="Library">
-          <span class="material-symbols-outlined text-[20px]">collections_bookmark</span>
-        </a>
-      </div>
+      <div class="flex items-center gap-3"></div>
     </div>
   </header>
 
@@ -262,6 +256,24 @@
       try { return JSON.parse(localStorage.getItem('progress') || '{}'); } catch { return {}; }
     }
 
+    function bookmarkMap() {
+      try { return JSON.parse(localStorage.getItem('bookmarks') || '{}'); } catch { return {}; }
+    }
+
+    function relativeAge(value) {
+      const time = value ? new Date(value).getTime() : 0;
+      if (!time || Number.isNaN(time)) return '';
+      const minutes = Math.max(0, Math.floor((Date.now() - time) / 60000));
+      if (minutes < 60) return `${minutes || 1}m`;
+      if (minutes < 1440) return `${Math.floor(minutes / 60)}h`;
+      return `${Math.floor(minutes / 1440)}d`;
+    }
+
+    function updateDate(comic) {
+      return comic.updated_at || comic.updatedAt || comic.last_update || comic.updated_date ||
+        comic.release_date || comic.created_at;
+    }
+
     let allComics = [];
     const PAGE_SIZE = 12;
     let currentPage = 1;
@@ -344,6 +356,7 @@
       const pageItems = list.slice(startIndex, startIndex + PAGE_SIZE);
 
       const prog = progressMap();
+      const bookmarks = bookmarkMap();
 
       for (const c of pageItems) {
         const cover = c.cover_portrait_url || c.cover_image_url || '';
@@ -353,16 +366,19 @@
         const latestCh = c.latest_chapter_number != null ? `Ch. ${esc(c.latest_chapter_number)}` : '';
         const rate = c.user_rate ? Number(c.user_rate).toFixed(1) : '4.9';
         const p = prog[c.manga_id];
+        const marked = !!bookmarks[c.manga_id];
+        const updated = relativeAge(updateDate(c));
 
         const card = document.createElement('article');
-        card.className = 'group flex flex-col bg-surface-container-low rounded-xl overflow-hidden border border-outline-variant hover:border-primary-container transition-all';
+        card.className = 'group relative flex flex-col bg-surface-container-low rounded-xl overflow-hidden border border-outline-variant hover:border-primary-container transition-all';
         card.innerHTML = `
+      <button type="button" data-bookmark="${c.manga_id}" aria-label="${marked ? 'Hapus tanda' : 'Tandai komik'}" class="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-surface-container-lowest/90 text-primary hover:bg-primary-container hover:text-white transition-colors">
+        <span class="material-symbols-outlined text-[17px]" style="font-variation-settings: 'FILL' ${marked ? 1 : 0};">bookmark</span>
+      </button>
       <a href="/chapters?manga=${c.manga_id}" class="relative aspect-[3/4] overflow-hidden bg-surface-container block">
         ${cover ? `<img src="${cover}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" referrerpolicy="no-referrer" loading="lazy">` : `<div class="w-full h-full flex items-center justify-center text-outline"><span class="material-symbols-outlined text-3xl">menu_book</span></div>`}
         <div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent opacity-80"></div>
-        <span class="absolute top-2 left-2 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase bg-primary-container text-white shadow">
-          ${p ? 'BACA' : 'UP'}
-        </span>
+        ${!p && updated ? `<span class="absolute top-2 left-2 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase bg-primary-container text-white shadow">${updated}</span>` : ''}
         <span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-surface-container-lowest/90 backdrop-blur-sm text-secondary text-[10px] font-semibold border border-outline-variant/60">
           ${type}
         </span>
@@ -385,6 +401,14 @@
       </div>
     `;
         grid.appendChild(card);
+        card.querySelector('[data-bookmark]').addEventListener('click', (event) => {
+          event.stopPropagation();
+          const current = bookmarkMap();
+          if (current[c.manga_id]) delete current[c.manga_id];
+          else current[c.manga_id] = { at: Date.now() };
+          localStorage.setItem('bookmarks', JSON.stringify(current));
+          renderCatalogGrid();
+        });
       }
 
       if (!pageItems.length) {
@@ -593,6 +617,8 @@
       currentPage = 1;
       renderCatalogGrid();
     });
+
+    addEventListener('storage', () => renderCatalogGrid());
 
     document.addEventListener('keydown', (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {

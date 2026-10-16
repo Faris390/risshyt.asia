@@ -140,6 +140,7 @@ function renderInfo(m) {
   const genres = (m.taxonomy?.Genre || []).map(g => g.name).join(', ');
   const author = (m.taxonomy?.Author || []).map(a => a.name).join(', ');
   const cover = m.cover_portrait_url || m.cover_image_url || '';
+  const updated = m.updated_at || m.updatedAt || m.last_update || m.updated_date || m.release_date;
 
   const info = $('#info');
   info.innerHTML = `
@@ -157,8 +158,8 @@ function renderInfo(m) {
             ${m.bookmark_count ? `<span class="text-xs text-outline flex items-center gap-1 ml-auto"><span class="material-symbols-outlined text-[14px]">bookmark</span>${m.bookmark_count}</span>` : ''}
           </div>
           <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-on-surface mb-2">${m.title}</h1>
-          <p class="text-xs text-on-surface-variant font-medium mb-3">${[author, genres].filter(Boolean).join(' • ')}</p>
-          <p class="text-sm text-on-surface-variant leading-relaxed line-clamp-3 mb-4">${m.description || 'Tidak ada deskripsi.'}</p>
+          <p class="text-xs text-on-surface-variant font-medium mb-3">${[author, genres].filter(Boolean).join(' • ')}${updated ? ` · Diperbarui ${fmtDate(updated)}` : ''}</p>
+          <p class="text-sm text-on-surface-variant leading-relaxed whitespace-pre-line mb-4">${esc(m.description || 'Tidak ada deskripsi.')}</p>
         </div>
         <div id="action-btn-container" class="pt-4 border-t border-outline-variant/60 flex items-center gap-3"></div>
       </div>
@@ -171,6 +172,12 @@ function renderActions() {
   if (!container || !chapters.length) return;
   const oldest = chapters[chapters.length - 1];
 
+  const marked = getBookmarks()[mangaId];
+  const bookmarkButton = `<button type="button" id="bookmark-btn" class="px-4 py-2.5 rounded-xl font-medium text-sm transition-colors border border-outline-variant ${marked ? 'bg-primary-container text-white' : 'bg-surface-container hover:bg-surface-container-high text-on-surface'}">
+    <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' ${marked ? 1 : 0};">bookmark</span>
+    ${marked ? 'Ditandai' : 'Tandai Komik'}
+  </button>`;
+
   if (lastRead) {
     container.innerHTML = `
       <a href="/reader?id=${lastRead.chapterId}&manga=${mangaId}" class="px-5 py-2.5 bg-primary-container hover:bg-opacity-90 text-white rounded-xl font-semibold text-sm transition-colors flex items-center gap-2 shadow-sm">
@@ -180,6 +187,7 @@ function renderActions() {
       <a href="${readerUrl(oldest)}" class="px-4 py-2.5 bg-surface-container hover:bg-surface-container-high text-on-surface rounded-xl font-medium text-sm transition-colors border border-outline-variant">
         Mulai dari Ch. ${oldest.chapter_number}
       </a>
+      ${bookmarkButton}
     `;
   } else {
     container.innerHTML = `
@@ -187,8 +195,22 @@ function renderActions() {
         <span class="material-symbols-outlined text-[18px]">menu_book</span>
         <span>Mulai Baca Ch. ${oldest.chapter_number}</span>
       </a>
+      ${bookmarkButton}
     `;
   }
+  $('#bookmark-btn').addEventListener('click', toggleBookmark);
+}
+
+function getBookmarks() {
+  try { return JSON.parse(localStorage.getItem('bookmarks') || '{}'); } catch { return {}; }
+}
+
+function toggleBookmark() {
+  const bookmarks = getBookmarks();
+  if (bookmarks[mangaId]) delete bookmarks[mangaId];
+  else bookmarks[mangaId] = { at: Date.now() };
+  localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+  renderActions();
 }
 
 function renderReadProgress() {

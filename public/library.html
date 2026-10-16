@@ -99,20 +99,11 @@
     <!-- HEADER HALAMAN LIBRARY -->
     <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-outline-variant">
       <div>
-        <div class="flex items-center gap-2 mb-1.5 flex-wrap">
-          <span class="text-xs px-2.5 py-0.5 rounded-full bg-primary-container/20 text-primary border border-primary-container/30 font-semibold tracking-wider uppercase">
-            Personal Repository
-          </span>
-          <span class="flex items-center gap-1.5 text-xs text-on-surface-variant">
-            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            Lokal Terkoneksi
-          </span>
-        </div>
         <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-on-surface">
-          Library &amp; Koleksi Saya
+          Library
         </h1>
         <p class="text-sm text-on-surface-variant mt-1 flex items-center gap-2">
-          <span>Koleksi tersimpan di library.json:</span>
+          <span>Komik yang kamu tandai atau sudah dibaca.</span>
           <span id="stat-total" class="font-semibold text-on-surface bg-surface-container px-2 py-0.5 rounded-lg border border-outline-variant text-xs">
             0 Komik
           </span>
@@ -133,10 +124,15 @@
 
     <!-- SECTION: KOLEKSI BUKU / DAFTAR KOMIK -->
     <section class="mt-8">
+      <div class="flex items-center gap-2 mb-5 border-b border-outline-variant">
+        <button class="library-tab px-1 pb-3 mr-4 text-sm font-semibold text-primary border-b-2 border-primary-container" data-tab="all">Semua</button>
+        <button class="library-tab px-1 pb-3 mr-4 text-sm text-on-surface-variant hover:text-on-surface" data-tab="history">Riwayat</button>
+        <button class="library-tab px-1 pb-3 text-sm text-on-surface-variant hover:text-on-surface" data-tab="bookmarks">Ditandai</button>
+      </div>
       <div class="flex items-center justify-between mb-4">
         <div>
-          <h2 class="text-lg font-bold text-on-surface">Daftar Komik Tersimpan</h2>
-          <p class="text-xs text-on-surface-variant">Daftar komik aktif yang dimuat langsung dari upstream API</p>
+          <h2 id="collection-title" class="text-lg font-bold text-on-surface">Komik saya</h2>
+          <p class="text-xs text-on-surface-variant">Riwayat bacaan dan komik yang ditandai tersimpan di perangkat ini.</p>
         </div>
         <div id="status-badge" class="text-xs text-on-surface-variant"></div>
       </div>
@@ -201,7 +197,16 @@ function progressMap() {
   try { return JSON.parse(localStorage.getItem('progress') || '{}'); } catch { return {}; }
 }
 
+function historyMap() {
+  try { return JSON.parse(localStorage.getItem('readHistory') || '{}'); } catch { return {}; }
+}
+
+function bookmarkMap() {
+  try { return JSON.parse(localStorage.getItem('bookmarks') || '{}'); } catch { return {}; }
+}
+
 let loadedComics = [];
+let activeTab = 'all';
 
 function renderHeroProgress(comic, prog) {
   const section = $('#hero-progress-section');
@@ -216,6 +221,8 @@ function renderHeroProgress(comic, prog) {
   const title = esc(comic.title);
   const desc = esc(comic.description || 'Tidak ada sinopsis.');
   const chapterNumber = esc(prog.number);
+  const history = historyMap()[comic.manga_id] || {};
+  const readCount = Object.keys(history).length;
 
   card.innerHTML = `
     <div class="flex flex-col md:flex-row gap-5 items-center">
@@ -244,7 +251,7 @@ function renderHeroProgress(comic, prog) {
           <div class="mt-4 p-3 rounded-xl bg-surface-container border border-outline-variant/60 flex items-center justify-between">
             <span class="text-xs sm:text-sm font-semibold flex items-center gap-1.5">
               <span class="material-symbols-outlined text-[16px] text-primary-container">bookmark_added</span>
-              Terakhir dibaca: Chapter ${chapterNumber}
+              Terakhir dibaca: Chapter ${chapterNumber} · ${readCount} selesai
             </span>
             ${comic.latest_chapter_number != null ? `<span class="text-xs text-primary font-bold">Terbaru: Ch. ${esc(comic.latest_chapter_number)}</span>` : ''}
           </div>
@@ -270,6 +277,9 @@ function createComicCard(comic, prog) {
   const typeName = esc(comic.taxonomy?.Format?.[0]?.name || 'KOMIK');
   const latestCh = comic.latest_chapter_number != null ? `Ch. ${esc(comic.latest_chapter_number)}` : '';
   const lastReadCh = prog ? `Dibaca: Ch. ${esc(prog.number)}` : null;
+  const history = historyMap()[comic.manga_id] || {};
+  const marked = !!bookmarkMap()[comic.manga_id];
+  const historyNumbers = Object.values(history).map(item => item.number).filter(Boolean).sort((a, b) => Number(a) - Number(b));
 
   const card = document.createElement('div');
   card.className = 'group relative bg-surface-container-low rounded-xl border border-outline-variant overflow-hidden hover:border-primary-container/80 transition-all duration-200 flex flex-col';
@@ -302,8 +312,10 @@ function createComicCard(comic, prog) {
           ${title}
         </a>
         <div class="flex items-center justify-between text-xs text-on-surface-variant mt-1">
-          <span>${lastReadCh || 'Belum dibaca'}</span>
-          ${comic.bookmark_count ? `<span class="text-outline flex items-center gap-0.5"><span class="material-symbols-outlined text-[12px]">bookmark</span>${comic.bookmark_count}</span>` : ''}
+          <span>${lastReadCh || 'Belum dibaca'}${historyNumbers.length ? ` · Selesai: ${esc(historyNumbers.join(', '))}` : ''}</span>
+          <button type="button" data-bookmark="${comic.manga_id}" class="text-primary hover:text-on-surface" title="${marked ? 'Hapus tanda' : 'Tandai komik'}">
+            <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' ${marked ? 1 : 0};">bookmark</span>
+          </button>
         </div>
       </div>
 
@@ -323,6 +335,14 @@ function createComicCard(comic, prog) {
     </div>
   `;
 
+  card.querySelector('[data-bookmark]').addEventListener('click', (event) => {
+    event.preventDefault();
+    const bookmarks = bookmarkMap();
+    if (bookmarks[comic.manga_id]) delete bookmarks[comic.manga_id];
+    else bookmarks[comic.manga_id] = { at: Date.now() };
+    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+    filterAndDisplay();
+  });
   return card;
 }
 
@@ -331,7 +351,15 @@ function filterAndDisplay() {
   const grid = $('#grid');
   grid.replaceChildren();
 
-  const filtered = loadedComics.filter(c => c.title && c.title.toLowerCase().includes(query));
+  const histories = historyMap();
+  const bookmarks = bookmarkMap();
+  const filtered = loadedComics.filter(c => {
+    const inHistory = !!histories[c.manga_id] && Object.keys(histories[c.manga_id]).length > 0;
+    const inBookmarks = !!bookmarks[c.manga_id];
+    const matchesTab = activeTab === 'history' ? inHistory : activeTab === 'bookmarks' ? inBookmarks : inHistory || inBookmarks;
+    return matchesTab && c.title && c.title.toLowerCase().includes(query);
+  });
+  $('#collection-title').textContent = activeTab === 'history' ? 'Riwayat bacaan' : activeTab === 'bookmarks' ? 'Komik ditandai' : 'Komik saya';
   const prog = progressMap();
 
   for (const item of filtered) {
@@ -359,7 +387,7 @@ async function main() {
       return;
     }
 
-    $('#stat-total').textContent = `${ids.length} Komik`;
+    $('#stat-total').textContent = '0 Komik';
     const prog = progressMap();
     let failed = 0;
     let latestReadComic = null;
@@ -393,6 +421,13 @@ async function main() {
         latestReadProg = p;
       }
 
+      filterAndDisplay();
+      const personalCount = loadedComics.filter(c => {
+        const h = historyMap()[c.manga_id];
+        return (h && Object.keys(h).length) || bookmarkMap()[c.manga_id];
+      }).length;
+      $('#stat-total').textContent = `${personalCount} Komik`;
+
       gridEl.appendChild(createComicCard(comic, p));
     }
 
@@ -410,6 +445,20 @@ async function main() {
 }
 
 $('#search-input').addEventListener('input', filterAndDisplay);
+
+document.querySelectorAll('.library-tab').forEach((tab) => {
+  tab.addEventListener('click', () => {
+    activeTab = tab.dataset.tab;
+    document.querySelectorAll('.library-tab').forEach((item) => {
+      item.className = item === tab
+        ? 'library-tab px-1 pb-3 mr-4 text-sm font-semibold text-primary border-b-2 border-primary-container'
+        : 'library-tab px-1 pb-3 mr-4 text-sm text-on-surface-variant hover:text-on-surface';
+    });
+    filterAndDisplay();
+  });
+});
+
+addEventListener('storage', filterAndDisplay);
 
 // Keyboard shortcut Ctrl+K
 document.addEventListener('keydown', (e) => {
