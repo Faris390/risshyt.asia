@@ -319,6 +319,16 @@
 
       const sortVal = $('#sort-select') ? $('#sort-select').value : 'latest';
       let list = [...allComics];
+      const query = $('#nav-search').value.trim().toLowerCase();
+
+      if (query) {
+        list = list.filter(c => {
+          const title = (c.title || '').toLowerCase();
+          const author = (c.taxonomy?.Author || []).some(a => (a.name || '').toLowerCase().includes(query));
+          const genre = (c.taxonomy?.Genre || []).some(g => (g.name || '').toLowerCase().includes(query));
+          return title.includes(query) || author || genre;
+        });
+      }
 
       if (sortVal === 'views') list.sort((a, b) => (b.view_count || 0) - (a.view_count || 0));
       else if (sortVal === 'rate') list.sort((a, b) => (b.user_rate || 0) - (a.user_rate || 0));
@@ -378,7 +388,9 @@
       }
 
       if (!pageItems.length) {
-        grid.innerHTML = '<div class="col-span-full py-12 text-center text-sm text-outline">Perpustakaan masih kosong.</div>';
+        grid.innerHTML = query
+          ? `<div class="col-span-full py-12 text-center text-sm text-outline">Tidak ada komik yang cocok dengan "${esc(query)}".</div>`
+          : '<div class="col-span-full py-12 text-center text-sm text-outline">Perpustakaan masih kosong.</div>';
       }
 
       renderPagination(totalPages, totalItems);
@@ -573,6 +585,11 @@
     }
 
     $('#sort-select').addEventListener('change', () => {
+      currentPage = 1;
+      renderCatalogGrid();
+    });
+
+    $('#nav-search').addEventListener('input', () => {
       currentPage = 1;
       renderCatalogGrid();
     });
