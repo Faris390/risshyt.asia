@@ -436,6 +436,11 @@ async function main() {
       return tb - ta;
     });
 
+    console.log('[Library] Sort selesai. Urutan loadedComics:');
+    loadedComics.forEach((c, i) => {
+      console.log(`  ${i+1}. ${c.title?.slice(0,40)} | ${updateDate(c) ?? 'NO DATE'}`);
+    });
+
     filterAndDisplay();
 
     const personalCount = loadedComics.filter(c => {
