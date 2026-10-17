@@ -79,7 +79,7 @@
 
   <!-- ================= TOP NAVIGATION BAR ================= -->
   <header class="bg-surface-container-low sticky top-0 z-50 border-b border-outline-variant">
-    <div class="w-full px-4 sm:px-6 lg:px-8 min-h-16 py-3 sm:py-0 flex flex-wrap items-center justify-between gap-3 max-w-[1440px] mx-auto">
+    <div class="w-full px-3 sm:px-6 lg:px-8 min-h-14 sm:min-h-16 py-2.5 sm:py-0 flex flex-wrap items-center justify-between gap-2.5 sm:gap-4 max-w-[1440px] mx-auto">
       <div class="flex flex-wrap items-center gap-3 sm:gap-6 flex-1 min-w-0">
         <a class="flex items-center gap-2" href="/">
           <span
@@ -93,7 +93,7 @@
             <span class="material-symbols-outlined text-[18px]">search</span>
           </span>
           <input id="nav-search"
-            class="w-full bg-surface-container border border-outline-variant rounded-xl pl-9 pr-12 py-1.5 text-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary-container transition-colors"
+            class="w-full bg-surface-container border border-outline-variant rounded-xl pl-9 pr-4 py-1.5 text-xs sm:text-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary-container transition-colors"
             placeholder="Cari dalam koleksi..." type="text">
         </div>
       </div>
@@ -115,11 +115,11 @@
   </header>
 
   <!-- ================= MAIN CONTENT CANVAS ================= -->
-  <main class="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col gap-8">
+  <main class="flex-1 w-full max-w-[1440px] mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col gap-6 sm:gap-8">
 
     <!-- State Loading / Kosong -->
     <div id="home-status"
-      class="py-16 text-center text-on-surface-variant bg-surface-container-low rounded-2xl border border-outline-variant">
+      class="py-16 text-center text-on-surface-variant bg-surface-container-low rounded-2xl border border-outline-variant text-sm">
       Memuat data dari perpustakaan…
     </div>
 
@@ -129,22 +129,22 @@
       hidden></a>
 
     <!-- Main Content Layout (Grid + Right Sidebar) -->
-    <div id="catalog-container" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start" hidden>
+    <div id="catalog-container" class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start" hidden>
 
       <!-- Primary Catalog Grid Area -->
-      <section class="lg:col-span-8 flex flex-col gap-6">
-        <div class="flex items-center justify-between gap-4 flex-wrap">
-          <div class="flex items-center gap-3">
-            <h2 class="text-xl font-bold text-on-surface tracking-tight">Koleksi &amp; Pembaruan Komik</h2>
+      <section class="lg:col-span-8 flex flex-col gap-4 sm:gap-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center justify-between sm:justify-start gap-2.5">
+            <h2 class="text-lg sm:text-xl font-bold text-on-surface tracking-tight">Koleksi &amp; Pembaruan Komik</h2>
             <span id="comic-count-badge"
               class="px-2 py-0.5 rounded-full bg-surface-container text-outline text-xs"></span>
           </div>
-          <div class="flex items-center gap-3">
-            <div class="relative flex items-center">
+          <div class="flex items-center justify-between sm:justify-end gap-2.5 w-full sm:w-auto">
+            <div class="relative flex items-center flex-1 sm:flex-initial">
               <span
                 class="material-symbols-outlined absolute left-2.5 text-outline text-[16px] pointer-events-none">sort</span>
               <select id="sort-select"
-                class="bg-surface-container border border-outline-variant text-on-surface text-xs font-semibold rounded-lg pl-8 pr-7 py-1.5 appearance-none focus:outline-none focus:border-primary-container cursor-pointer transition-colors hover:border-outline">
+                class="w-full sm:w-auto bg-surface-container border border-outline-variant text-on-surface text-xs font-semibold rounded-lg pl-8 pr-7 py-2 appearance-none focus:outline-none focus:border-primary-container cursor-pointer transition-colors hover:border-outline">
                 <option value="latest">Update Terkini</option>
                 <option value="views">Paling Populer</option>
                 <option value="rate">Rating Tertinggi</option>
@@ -153,7 +153,7 @@
               <span
                 class="material-symbols-outlined absolute right-2 text-outline text-[16px] pointer-events-none">expand_more</span>
             </div>
-            <a href="/browse" class="text-xs font-semibold text-primary hover:underline flex items-center gap-0.5">
+            <a href="/browse" class="text-xs font-semibold text-primary hover:underline flex items-center gap-0.5 shrink-0 px-2 py-2">
               Jelajah
               <span class="material-symbols-outlined text-[16px]">chevron_right</span>
             </a>
@@ -161,11 +161,11 @@
         </div>
 
         <!-- Comic Cards Grid -->
-        <div id="comic-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+        <div id="comic-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4"></div>
 
         <!-- Pagination Controls -->
         <div id="pagination-container"
-          class="hidden flex items-center justify-between pt-4 border-t border-outline-variant/60 flex-wrap gap-3">
+          class="hidden flex flex-col sm:flex-row items-center justify-between pt-4 border-t border-outline-variant/60 gap-3 w-full">
         </div>
       </section>
 
@@ -205,20 +205,20 @@
 
   <!-- Mobile Bottom Nav -->
   <nav
-    class="md:hidden fixed bottom-0 left-0 w-full z-50 flex items-center justify-around px-4 py-2 bg-surface-container-low/95 backdrop-blur-md border-t border-outline-variant">
-    <a href="/" class="flex flex-col items-center gap-1 text-primary font-bold text-xs py-1">
+    class="md:hidden fixed bottom-0 left-0 w-full z-50 flex items-center justify-around px-3 py-2 pb-[max(0.6rem,env(safe-area-inset-bottom))] bg-surface-container-low/95 backdrop-blur-md border-t border-outline-variant">
+    <a href="/" class="flex flex-col items-center gap-1 text-primary font-bold text-[11px] py-1">
       <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">home</span>
       <span>Home</span>
     </a>
-    <a href="/browse" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
+    <a href="/browse" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-[11px] py-1">
       <span class="material-symbols-outlined text-[20px]">explore</span>
       <span>Browse</span>
     </a>
-    <a href="/rankings" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
+    <a href="/rankings" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-[11px] py-1">
       <span class="material-symbols-outlined text-[20px]">leaderboard</span>
       <span>Rankings</span>
     </a>
-    <a href="/library" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
+    <a href="/library" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-[11px] py-1">
       <span class="material-symbols-outlined text-[20px]">collections_bookmark</span>
       <span>Library</span>
     </a>
@@ -254,15 +254,22 @@
     function relativeAge(value) {
       const time = value ? new Date(value).getTime() : 0;
       if (!time || Number.isNaN(time)) return '';
-      const minutes = Math.max(0, Math.floor((Date.now() - time) / 60000));
-      if (minutes < 60) return `${minutes || 1}m`.toLowerCase();
-      if (minutes < 1440) return `${Math.floor(minutes / 60)}h`.toLowerCase();
-      return `${Math.floor(minutes / 1440)}d`.toLowerCase();
+      const diffMs = Date.now() - time;
+      if (diffMs < 0) return 'baru';
+      const minutes = Math.floor(diffMs / 60000);
+      if (minutes < 60) return `${Math.max(1, minutes)}m`;
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return `${hours}h`;
+      const days = Math.floor(hours / 24);
+      if (days < 30) return `${days}d`;
+      if (days < 365) return `${Math.floor(days / 30)}mo`;
+      return `${Math.floor(days / 365)}y`;
     }
 
     function updateDate(comic) {
-      return comic.updated_at || comic.updatedAt || comic.last_update || comic.updated_date ||
-        comic.release_date || comic.created_at;
+      return comic.latest_chapter_time || comic.latest_chapter_date ||
+        comic.chapter_updated_at || comic.updated_at || comic.updatedAt ||
+        comic.last_update || comic.updated_date || comic.release_date || comic.created_at;
     }
 
     let allComics = [];
@@ -282,32 +289,36 @@
 
       el.href = `/chapters?manga=${m.manga_id}`;
       el.innerHTML = `
-    <div class="grid grid-cols-1 lg:grid-cols-12 min-h-[360px] lg:h-[400px]">
-      <div class="lg:col-span-7 p-6 lg:p-8 flex flex-col justify-between z-10 bg-gradient-to-r from-surface-container-low via-surface-container-low/95 to-transparent">
-        <div class="space-y-3 max-w-xl">
-          <div class="flex items-center gap-2">
-            <span class="px-2.5 py-0.5 rounded-full bg-primary-container text-white text-[11px] font-bold uppercase tracking-wider">Recommended</span>
-            <span class="px-2.5 py-0.5 rounded bg-surface-container text-secondary text-[11px] font-semibold">${type}</span>
-            <div class="flex items-center text-amber-400 gap-1 ml-2">
+    <div class="grid grid-cols-1 lg:grid-cols-12 min-h-[300px] sm:min-h-[360px] lg:h-[400px]">
+      <div class="lg:col-span-7 p-4 sm:p-6 lg:p-8 flex flex-col justify-between z-10 bg-gradient-to-r from-surface-container-low via-surface-container-low/95 to-transparent">
+        <div class="space-y-2.5 sm:space-y-3 max-w-xl">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="px-2.5 py-0.5 rounded-full bg-primary-container text-white text-[10px] sm:text-[11px] font-bold uppercase tracking-wider">Recommended</span>
+            <span class="px-2.5 py-0.5 rounded bg-surface-container text-secondary text-[10px] sm:text-[11px] font-semibold">${type}</span>
+            <div class="flex items-center text-amber-400 gap-1 ml-1 sm:ml-2">
               <span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span>
               <span class="text-on-surface font-semibold text-xs">${rating}</span>
             </div>
           </div>
-          <h1 class="text-2xl lg:text-3xl font-extrabold text-on-surface group-hover:text-primary transition-colors tracking-tight leading-tight">${title}</h1>
-          <p class="text-xs sm:text-sm text-on-surface-variant line-clamp-3">${desc}</p>
-          <div class="flex flex-wrap gap-1.5 pt-1">
-            ${genres.map(g => `<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant text-[11px] border border-outline-variant">${esc(g.name)}</span>`).join('')}
+          <h1 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-on-surface group-hover:text-primary transition-colors tracking-tight leading-tight">${title}</h1>
+          <p class="text-xs sm:text-sm text-on-surface-variant line-clamp-2 sm:line-clamp-3">${desc}</p>
+          <div class="flex flex-wrap gap-1 sm:gap-1.5 pt-1">
+            ${genres.map(g => `<span class="px-2 py-0.5 rounded bg-surface-container-high text-on-surface-variant text-[10px] sm:text-[11px] border border-outline-variant">${esc(g.name)}</span>`).join('')}
           </div>
         </div>
-        <div class="pt-6 flex flex-wrap items-center justify-between border-t border-outline-variant/50 mt-4 text-xs text-on-surface-variant">
+        <div class="pt-4 sm:pt-6 flex flex-wrap items-center justify-between border-t border-outline-variant/50 mt-3 sm:mt-4 text-xs text-on-surface-variant">
           ${m.latest_chapter_number != null ? `
             <div class="flex items-center gap-2">
               <span class="text-on-surface font-semibold">Ch. ${esc(m.latest_chapter_number)}</span>
             </div>
           ` : `<div></div>`}
+          <span class="text-xs font-semibold text-primary flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+            <span>Baca Sekarang</span>
+            <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </span>
         </div>
       </div>
-      <div class="lg:col-span-5 relative h-60 lg:h-full overflow-hidden border-t lg:border-t-0 lg:border-l border-outline-variant bg-surface-container">
+      <div class="lg:col-span-5 relative h-48 sm:h-60 lg:h-full overflow-hidden border-t lg:border-t-0 lg:border-l border-outline-variant bg-surface-container">
         ${cover ? `<img src="${cover}" alt="${title}" class="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300" referrerpolicy="no-referrer">` : `<div class="w-full h-full flex items-center justify-center text-outline"><span class="material-symbols-outlined text-5xl">menu_book</span></div>`}
         <div class="absolute inset-0 bg-gradient-to-t from-surface-container-low via-transparent to-transparent lg:hidden"></div>
       </div>
@@ -364,7 +375,7 @@
       <a href="/chapters?manga=${c.manga_id}" class="relative aspect-[3/4] overflow-hidden bg-surface-container block">
         ${cover ? `<img src="${cover}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" referrerpolicy="no-referrer" loading="lazy">` : `<div class="w-full h-full flex items-center justify-center text-outline"><span class="material-symbols-outlined text-3xl">menu_book</span></div>`}
         <div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent opacity-80"></div>
-        ${!p && updated ? `<span class="absolute top-2 left-2 px-1.5 py-0.5 rounded text-[10px] font-bold uppercase bg-primary-container text-white shadow">${updated}</span>` : ''}
+        ${updated ? `<span class="absolute top-2 left-2 px-1.5 py-0.5 rounded text-[10px] font-bold bg-primary-container text-white shadow">${updated}</span>` : ''}
         <span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-surface-container-lowest/90 backdrop-blur-sm text-secondary text-[10px] font-semibold border border-outline-variant/60">
           ${type}
         </span>
@@ -373,16 +384,16 @@
           <span>${rate}</span>
         </div>
       </a>
-      <div class="p-3 flex flex-col justify-between flex-1 gap-2">
+      <div class="p-2.5 sm:p-3 flex flex-col justify-between flex-1 gap-2">
         <div>
-          <a href="/chapters?manga=${c.manga_id}" class="font-bold text-sm text-on-surface group-hover:text-primary transition-colors line-clamp-1" title="${title}">
+          <a href="/chapters?manga=${c.manga_id}" class="font-bold text-xs sm:text-sm text-on-surface group-hover:text-primary transition-colors line-clamp-1" title="${title}">
             ${title}
           </a>
-          <p class="text-[11px] text-outline truncate">${esc(genres)}</p>
+          <p class="text-[10px] sm:text-[11px] text-outline truncate mt-0.5">${esc(genres)}</p>
         </div>
         <div class="flex items-center justify-between pt-2 border-t border-outline-variant/60 text-xs">
-          <span class="text-primary font-semibold">${latestCh}</span>
-          ${p ? `<a href="/reader?id=${p.chapterId}&manga=${c.manga_id}" class="text-[11px] text-primary hover:underline font-bold">Lanjut</a>` : `<span class="text-[11px] text-outline">Koleksi</span>`}
+          <span class="text-primary font-semibold text-[11px] sm:text-xs">${latestCh}</span>
+          ${p ? `<a href="/reader?id=${p.chapterId}&manga=${c.manga_id}" class="text-[11px] text-primary hover:underline font-bold flex items-center gap-0.5"><span>Lanjut</span><span class="material-symbols-outlined text-[13px]">play_arrow</span></a>` : `<span class="text-[11px] text-outline">Koleksi</span>`}
         </div>
       </div>
     `;
@@ -417,12 +428,12 @@
       const end = Math.min(currentPage * PAGE_SIZE, totalItems);
 
       const infoSpan = document.createElement('span');
-      infoSpan.className = 'text-xs text-outline font-medium';
+      infoSpan.className = 'text-xs text-outline font-medium text-center sm:text-left';
       infoSpan.innerHTML = `Menampilkan <span class="text-on-surface font-semibold">${start}-${end}</span> dari <span class="text-on-surface font-semibold">${totalItems}</span> judul`;
       container.appendChild(infoSpan);
 
       const btnGroup = document.createElement('div');
-      btnGroup.className = 'flex items-center gap-1.5';
+      btnGroup.className = 'flex items-center justify-center flex-wrap gap-1.5';
 
       const prevBtn = document.createElement('button');
       prevBtn.className = `px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all ${currentPage === 1 ? 'text-outline/40 bg-surface-container/40 cursor-not-allowed border border-outline-variant/30' : 'text-on-surface bg-surface-container hover:bg-surface-container-high border border-outline-variant hover:border-primary-container cursor-pointer'}`;

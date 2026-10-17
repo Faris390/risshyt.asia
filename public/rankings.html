@@ -68,11 +68,11 @@
 </head>
 
 <body
-  class="bg-background text-on-surface antialiased font-sans min-h-screen flex flex-col selection:bg-primary-container selection:text-white pb-16 md:pb-0">
+  class="bg-background text-on-surface antialiased font-sans min-h-screen flex flex-col selection:bg-primary-container selection:text-white pb-20 md:pb-0">
 
   <!-- ================= TOP NAVIGATION BAR ================= -->
   <header class="bg-surface-container-low sticky top-0 z-50 border-b border-outline-variant">
-    <div class="w-full px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4 max-w-[1440px] mx-auto">
+    <div class="w-full px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-3 sm:gap-4 max-w-[1440px] mx-auto">
       <div class="flex items-center gap-6">
         <a class="flex items-center gap-2" href="/">
           <span
@@ -98,27 +98,26 @@
   </header>
 
   <!-- ================= MAIN CONTENT CANVAS ================= -->
-  <main class="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+  <main class="flex-1 w-full max-w-[1440px] mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
     <!-- Page Header & Filtering Controls -->
-    <section class="mb-8">
-      <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 pb-6 border-b border-outline-variant">
+    <section class="mb-6 sm:mb-8">
+      <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-4 pb-4 sm:pb-6 border-b border-outline-variant">
         <div>
-          <div class="flex items-center gap-2 mb-2">
-          </div>
-          <h1 class="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">Peringkat Komik Terpopuler</h1>
+          <h1 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-on-surface tracking-tight">Peringkat Komik Terpopuler</h1>
+          <p class="text-xs sm:text-sm text-outline mt-0.5 sm:mt-1">Peringkat berdasarkan rating, popularitas, dan bookmark pembaca.</p>
         </div>
 
         <!-- Period Tabs -->
         <div
-          class="inline-flex p-1 bg-surface-container-low border border-outline-variant rounded-xl self-start md:self-auto">
+          class="flex overflow-x-auto no-scrollbar max-w-full p-1 bg-surface-container-low border border-outline-variant rounded-xl self-stretch sm:self-auto gap-1">
           <button data-sort="rate"
-            class="sort-tab px-4 py-1.5 text-xs font-semibold rounded-lg bg-primary-container text-white transition-colors">Rating
+            class="sort-tab whitespace-nowrap flex-1 sm:flex-initial text-center px-3 sm:px-4 py-1.5 text-xs font-semibold rounded-lg bg-primary-container text-white transition-colors">Rating
             Tertinggi</button>
           <button data-sort="views"
-            class="sort-tab px-4 py-1.5 text-xs font-medium text-on-surface-variant hover:text-on-surface transition-colors">Pembaca
+            class="sort-tab whitespace-nowrap flex-1 sm:flex-initial text-center px-3 sm:px-4 py-1.5 text-xs font-medium text-on-surface-variant hover:text-on-surface transition-colors">Pembaca
             Terbanyak</button>
           <button data-sort="bookmarks"
-            class="sort-tab px-4 py-1.5 text-xs font-medium text-on-surface-variant hover:text-on-surface transition-colors">Paling
+            class="sort-tab whitespace-nowrap flex-1 sm:flex-initial text-center px-3 sm:px-4 py-1.5 text-xs font-medium text-on-surface-variant hover:text-on-surface transition-colors">Paling
             Dibookmark</button>
         </div>
       </div>
@@ -126,12 +125,12 @@
 
     <!-- State Loading / Kosong -->
     <div id="rank-status"
-      class="py-16 text-center text-on-surface-variant bg-surface-container-low rounded-2xl border border-outline-variant">
+      class="py-16 text-center text-on-surface-variant bg-surface-container-low rounded-2xl border border-outline-variant text-sm">
       Memuat daftar peringkat komik…
     </div>
 
     <!-- 2-Column Main Layout Grid -->
-    <div id="rank-content" class="grid grid-cols-1 lg:grid-cols-12 gap-8" hidden>
+    <div id="rank-content" class="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8" hidden>
       <!-- LEFT / PRIMARY COLUMN (Span 8) -->
       <section class="lg:col-span-8 space-y-8">
 
@@ -192,20 +191,20 @@
 
   <!-- Mobile Bottom Nav -->
   <nav
-    class="md:hidden fixed bottom-0 left-0 w-full z-50 flex items-center justify-around px-4 py-2 bg-surface-container-low/95 backdrop-blur-md border-t border-outline-variant">
-    <a href="/" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
+    class="md:hidden fixed bottom-0 left-0 w-full z-50 flex items-center justify-around px-3 py-2 pb-[max(0.6rem,env(safe-area-inset-bottom))] bg-surface-container-low/95 backdrop-blur-md border-t border-outline-variant">
+    <a href="/" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-[11px] py-1">
       <span class="material-symbols-outlined text-[20px]">home</span>
       <span>Home</span>
     </a>
-    <a href="/browse" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
+    <a href="/browse" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-[11px] py-1">
       <span class="material-symbols-outlined text-[20px]">explore</span>
       <span>Browse</span>
     </a>
-    <a href="/rankings" class="flex flex-col items-center gap-1 text-primary font-bold text-xs py-1">
+    <a href="/rankings" class="flex flex-col items-center gap-1 text-primary font-bold text-[11px] py-1">
       <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">leaderboard</span>
       <span>Rankings</span>
     </a>
-    <a href="/library" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
+    <a href="/library" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-[11px] py-1">
       <span class="material-symbols-outlined text-[20px]">collections_bookmark</span>
       <span>Library</span>
     </a>
@@ -260,35 +259,35 @@
         r1Box.href = `/chapters?manga=${c1.manga_id}`;
         r1Box.innerHTML = `
       <div class="absolute -right-12 -top-12 w-48 h-48 bg-primary-container/10 blur-3xl pointer-events-none rounded-full"></div>
-      <div class="flex items-center justify-between mb-4 relative z-10">
-        <span class="px-3 py-1 rounded-full bg-primary-container text-white text-xs font-bold flex items-center gap-1 shadow-md">
+      <div class="flex items-center justify-between mb-3 sm:mb-4 relative z-10">
+        <span class="px-2.5 sm:px-3 py-1 rounded-full bg-primary-container text-white text-[11px] sm:text-xs font-bold flex items-center gap-1 shadow-md">
           <span class="material-symbols-outlined text-[14px]">workspace_premium</span> RANK 01
         </span>
-        <span class="text-xs font-semibold text-primary bg-surface-container-high px-2 py-0.5 rounded border border-outline-variant">
+        <span class="text-[11px] sm:text-xs font-semibold text-primary bg-surface-container-high px-2 py-0.5 rounded border border-outline-variant">
           Pilihan Utama
         </span>
       </div>
-      <div class="flex gap-4 relative z-10">
-        <div class="w-28 sm:w-32 aspect-[3/4] flex-shrink-0 rounded-lg overflow-hidden border border-outline-variant bg-surface-container-highest relative">
+      <div class="flex gap-3 sm:gap-4 relative z-10">
+        <div class="w-24 sm:w-32 aspect-[3/4] flex-shrink-0 rounded-lg overflow-hidden border border-outline-variant bg-surface-container-highest relative">
           ${cover1 ? `<img src="${cover1}" alt="${esc(c1.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform" referrerpolicy="no-referrer">` : ''}
           <span class="absolute bottom-1 left-1 px-1.5 py-0.5 rounded text-[9px] font-bold bg-surface-container-lowest text-on-surface border border-outline-variant">${type1}</span>
         </div>
         <div class="flex-1 flex flex-col justify-between min-w-0">
           <div>
-            <h3 class="font-bold text-base sm:text-lg text-on-surface group-hover:text-primary transition-colors leading-snug line-clamp-2">${esc(c1.title)}</h3>
-            <p class="text-xs text-on-surface-variant mt-1">${author1} • ${esc(genre1)}</p>
-            <div class="flex items-center gap-3 mt-3 text-xs">
+            <h3 class="font-bold text-sm sm:text-lg text-on-surface group-hover:text-primary transition-colors leading-snug line-clamp-2">${esc(c1.title)}</h3>
+            <p class="text-[11px] sm:text-xs text-on-surface-variant mt-0.5 sm:mt-1">${author1} • ${esc(genre1)}</p>
+            <div class="flex items-center gap-2 sm:gap-3 mt-2 sm:mt-3 text-xs flex-wrap">
               <span class="flex items-center text-primary-container gap-1 font-bold">
-                <span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span> ${rate1}
+                <span class="material-symbols-outlined text-[14px] sm:text-[15px]" style="font-variation-settings: 'FILL' 1;">star</span> ${rate1}
               </span>
               <span class="text-outline-variant">•</span>
-              <span class="text-on-surface-variant">${c1.bookmark_count ? `${c1.bookmark_count} Bookmark` : `Ch. ${c1.latest_chapter_number || '-'}`}</span>
+              <span class="text-on-surface-variant text-[11px] sm:text-xs">${c1.bookmark_count ? `${c1.bookmark_count} Bookmark` : `Ch. ${c1.latest_chapter_number || '-'}`}</span>
             </div>
-            <p class="text-xs text-on-surface-variant mt-2 line-clamp-2">${esc(c1.description || 'Petualangan seru dan menegangkan.')}</p>
+            <p class="text-[11px] sm:text-xs text-on-surface-variant mt-1.5 sm:mt-2 line-clamp-2">${esc(c1.description || 'Petualangan seru dan menegangkan.')}</p>
           </div>
-          <div class="flex items-center justify-between mt-4 pt-3 border-t border-outline-variant/50 text-xs text-on-surface-variant">
-            <span>Klik komik untuk membuka</span>
-            <span class="material-symbols-outlined text-primary text-[20px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+          <div class="flex items-center justify-between mt-3 sm:mt-4 pt-2.5 sm:pt-3 border-t border-outline-variant/50 text-[11px] sm:text-xs text-on-surface-variant">
+            <span>Buka detail komik</span>
+            <span class="material-symbols-outlined text-primary text-[18px] sm:text-[20px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
           </div>
         </div>
       </div>
@@ -306,7 +305,7 @@
 
         const card = document.createElement('a');
         card.href = `/chapters?manga=${c.manga_id}`;
-        card.className = 'bg-surface-container border border-outline-variant rounded-xl p-4 flex gap-3 group hover:border-primary-container hover:bg-surface-container-high transition-all relative overflow-hidden cursor-pointer block';
+        card.className = 'bg-surface-container border border-outline-variant rounded-xl p-3 sm:p-4 flex gap-3 group hover:border-primary-container hover:bg-surface-container-high transition-all relative overflow-hidden cursor-pointer block';
         card.innerHTML = `
       <div class="w-16 sm:w-20 aspect-[3/4] flex-shrink-0 rounded-lg overflow-hidden border border-outline-variant relative bg-surface-container-highest">
         ${cover ? `<img src="${cover}" alt="${esc(c.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform" referrerpolicy="no-referrer">` : ''}
@@ -315,14 +314,14 @@
       <div class="flex-1 flex flex-col justify-between min-w-0">
         <div>
           <span class="text-[10px] font-bold text-primary uppercase">${type}</span>
-          <h4 class="font-bold text-sm text-on-surface group-hover:text-primary transition-colors truncate mt-0.5">${esc(c.title)}</h4>
-          <p class="text-[11px] text-on-surface-variant truncate">${esc(genre)}</p>
+          <h4 class="font-bold text-xs sm:text-sm text-on-surface group-hover:text-primary transition-colors truncate mt-0.5">${esc(c.title)}</h4>
+          <p class="text-[10px] sm:text-[11px] text-on-surface-variant truncate">${esc(genre)}</p>
         </div>
         <div class="flex items-center justify-between text-xs pt-2 border-t border-outline-variant/50">
           <span class="flex items-center gap-1 text-primary-container font-bold">
-            <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span> ${rate}
+            <span class="material-symbols-outlined text-[13px] sm:text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span> ${rate}
           </span>
-          <span class="text-on-surface-variant text-[11px] font-medium">${c.latest_chapter_number != null ? `Ch. ${c.latest_chapter_number}` : ''}</span>
+          <span class="text-on-surface-variant text-[10px] sm:text-[11px] font-medium">${c.latest_chapter_number != null ? `Ch. ${c.latest_chapter_number}` : ''}</span>
         </div>
       </div>
     `;
@@ -342,16 +341,22 @@
           const type = esc(c.taxonomy?.Format?.[0]?.name || 'KOMIK');
           const row = document.createElement('a');
           row.href = `/chapters?manga=${c.manga_id}`;
-          row.className = 'px-6 py-3.5 flex items-center justify-between hover:bg-surface-container-high transition-colors cursor-pointer group block sm:flex';
+          row.className = 'px-3 sm:px-6 py-2.5 sm:py-3.5 flex items-center justify-between hover:bg-surface-container-high transition-colors cursor-pointer group block sm:flex';
           row.innerHTML = `
-        <div class="flex items-center gap-4 w-full sm:w-1/2 min-w-0">
-          <span class="w-8 text-center font-bold text-sm text-on-surface group-hover:text-primary transition-colors">0${i + 1}</span>
-          <div class="w-10 h-14 rounded overflow-hidden border border-outline-variant flex-shrink-0 bg-surface-container-highest">
+        <div class="flex items-center gap-3 sm:gap-4 w-full sm:w-1/2 min-w-0">
+          <span class="w-6 sm:w-8 text-center font-bold text-xs sm:text-sm text-on-surface group-hover:text-primary transition-colors">0${i + 1}</span>
+          <div class="w-9 h-12 sm:w-10 sm:h-14 rounded overflow-hidden border border-outline-variant flex-shrink-0 bg-surface-container-highest">
             ${cover ? `<img src="${cover}" alt="${esc(c.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform" referrerpolicy="no-referrer">` : ''}
           </div>
-          <div class="min-w-0 pr-2">
-            <span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-surface-container-high text-primary border border-outline-variant">${type}</span>
-            <h4 class="font-bold text-sm text-on-surface group-hover:text-primary transition-colors truncate mt-0.5">${esc(c.title)}</h4>
+          <div class="min-w-0 pr-2 flex-1">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="px-1.5 py-0.2 rounded text-[9px] font-bold bg-surface-container-high text-primary border border-outline-variant">${type}</span>
+              <span class="sm:hidden text-amber-400 font-bold text-[11px] flex items-center gap-0.5">
+                <span class="material-symbols-outlined text-[12px]" style="font-variation-settings: 'FILL' 1;">star</span> ${rate}
+              </span>
+            </div>
+            <h4 class="font-bold text-xs sm:text-sm text-on-surface group-hover:text-primary transition-colors truncate mt-0.5">${esc(c.title)}</h4>
+            <div class="sm:hidden text-[10px] text-outline truncate mt-0.5">${c.bookmark_count ? `${c.bookmark_count} Bookmark` : `Ch. ${c.latest_chapter_number || '-'}`}</div>
           </div>
         </div>
         <div class="hidden sm:flex items-center justify-end gap-6 w-1/2 pl-4 text-xs">

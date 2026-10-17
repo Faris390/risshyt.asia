@@ -50,11 +50,11 @@
   .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
 </head>
-<body class="bg-background text-on-surface antialiased font-sans min-h-screen flex flex-col selection:bg-primary-container selection:text-white pb-16 md:pb-0">
+<body class="bg-background text-on-surface antialiased font-sans min-h-screen flex flex-col selection:bg-primary-container selection:text-white pb-20 md:pb-0">
 
   <!-- ================= TOP NAVIGATION BAR ================= -->
   <header class="bg-surface-container-low sticky top-0 z-50 border-b border-outline-variant">
-    <div class="w-full px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4 max-w-[1440px] mx-auto">
+    <div class="w-full px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between gap-3 sm:gap-4 max-w-[1440px] mx-auto">
       <div class="flex items-center gap-6">
         <a class="flex items-center gap-2" href="/">
           <span class="w-7 h-7 rounded bg-primary-container flex items-center justify-center text-white text-sm font-bold">C</span>
@@ -75,12 +75,12 @@
   </header>
 
   <!-- ================= MAIN CONTENT CANVAS ================= -->
-  <main class="flex-1 w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
+  <main class="flex-1 w-full max-w-[1440px] mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6">
     <!-- Header Title -->
-    <div class="mb-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <div class="mb-4 sm:mb-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 sm:gap-3">
       <div>
-        <h1 class="text-2xl sm:text-3xl font-extrabold text-on-surface tracking-tight">Jelajah Komik</h1>
-        <p class="text-xs sm:text-sm text-outline mt-1">Cari dan temukan komik berdasarkan genre, format, atau urutan.</p>
+        <h1 class="text-xl sm:text-2xl md:text-3xl font-extrabold text-on-surface tracking-tight">Jelajah Komik</h1>
+        <p class="text-xs sm:text-sm text-outline mt-0.5 sm:mt-1">Cari dan temukan komik berdasarkan genre, format, atau urutan.</p>
       </div>
       <div class="hidden sm:flex items-center gap-2 text-xs text-outline">
         <span class="material-symbols-outlined text-[16px] text-primary">auto_stories</span>
@@ -89,14 +89,14 @@
     </div>
 
     <!-- Unified Filter Panel -->
-    <section class="bg-surface-container-low p-4 sm:p-5 rounded-2xl border border-outline-variant space-y-4 shadow-sm mb-6">
+    <section class="bg-surface-container-low p-3.5 sm:p-5 rounded-2xl border border-outline-variant space-y-3 sm:space-y-4 shadow-sm mb-5 sm:mb-6">
       <!-- Row 1: Search Input & Sort Dropdown -->
-      <div class="flex flex-col md:flex-row items-stretch md:items-center gap-3">
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3">
         <!-- Search Bar with Clear Button -->
         <div class="relative flex-1">
-          <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-[20px] pointer-events-none">search</span>
+          <span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-[18px] sm:text-[20px] pointer-events-none">search</span>
           <input id="search-input"
-            class="w-full bg-surface-container border border-outline-variant rounded-xl pl-10 pr-10 py-2.5 text-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all"
+            class="w-full bg-surface-container border border-outline-variant rounded-xl pl-9 sm:pl-10 pr-9 sm:pr-10 py-2 sm:py-2.5 text-xs sm:text-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container transition-all"
             placeholder="Cari judul komik atau pengarang..." type="text">
           <button id="clear-search" class="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-outline hover:text-on-surface transition-colors hidden" title="Hapus pencarian">
             <span class="material-symbols-outlined text-[18px]">close</span>
@@ -105,10 +105,10 @@
 
         <!-- Sort Select & Reset Controls -->
         <div class="flex items-center gap-2 shrink-0">
-          <div class="relative flex-1 md:flex-initial">
+          <div class="relative flex-1 sm:flex-initial">
             <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[18px] pointer-events-none">sort</span>
             <select id="sort-select"
-              class="w-full md:w-48 bg-surface-container border border-outline-variant text-on-surface text-xs font-semibold rounded-xl pl-9 pr-8 py-2.5 appearance-none focus:outline-none focus:border-primary-container cursor-pointer transition-colors hover:border-outline">
+              class="w-full sm:w-48 bg-surface-container border border-outline-variant text-on-surface text-xs font-semibold rounded-xl pl-8 sm:pl-9 pr-7 sm:pr-8 py-2 sm:py-2.5 appearance-none focus:outline-none focus:border-primary-container cursor-pointer transition-colors hover:border-outline">
               <option value="latest">Update Terkini</option>
               <option value="rate">Rating Tertinggi</option>
               <option value="views">Paling Banyak Dibaca</option>
@@ -118,7 +118,7 @@
           </div>
 
           <!-- Reset Filter Button -->
-          <button id="reset-filter-btn" class="hidden px-3.5 py-2.5 rounded-xl border border-outline-variant bg-surface-container text-xs font-semibold text-outline hover:text-on-surface hover:border-primary-container transition-all items-center gap-1.5 shrink-0" title="Reset semua filter">
+          <button id="reset-filter-btn" class="hidden px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-xl border border-outline-variant bg-surface-container text-xs font-semibold text-outline hover:text-on-surface hover:border-primary-container transition-all items-center gap-1.5 shrink-0" title="Reset semua filter">
             <span class="material-symbols-outlined text-[16px]">restart_alt</span>
             <span class="hidden sm:inline">Reset</span>
           </button>
@@ -175,25 +175,25 @@
 
     <!-- Comic Results Canvas -->
     <div id="browse-container" class="mt-2" hidden>
-      <div id="browse-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+      <div id="browse-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4"></div>
     </div>
   </main>
 
   <!-- Mobile Bottom Nav -->
-  <nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex items-center justify-around px-4 py-2 bg-surface-container-low/95 backdrop-blur-md border-t border-outline-variant">
-    <a href="/" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
+  <nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex items-center justify-around px-3 py-2 pb-[max(0.6rem,env(safe-area-inset-bottom))] bg-surface-container-low/95 backdrop-blur-md border-t border-outline-variant">
+    <a href="/" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-[11px] py-1">
       <span class="material-symbols-outlined text-[20px]">home</span>
       <span>Home</span>
     </a>
-    <a href="/browse" class="flex flex-col items-center gap-1 text-primary font-bold text-xs py-1">
+    <a href="/browse" class="flex flex-col items-center gap-1 text-primary font-bold text-[11px] py-1">
       <span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">explore</span>
       <span>Browse</span>
     </a>
-    <a href="/rankings" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
+    <a href="/rankings" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-[11px] py-1">
       <span class="material-symbols-outlined text-[20px]">leaderboard</span>
       <span>Rankings</span>
     </a>
-    <a href="/library" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-xs py-1">
+    <a href="/library" class="flex flex-col items-center gap-1 text-outline hover:text-on-surface text-[11px] py-1">
       <span class="material-symbols-outlined text-[20px]">collections_bookmark</span>
       <span>Library</span>
     </a>
@@ -213,6 +213,27 @@ function esc(str) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
     .replace(/'/g, '&#039;');
+}
+
+function relativeAge(value) {
+  const time = value ? new Date(value).getTime() : 0;
+  if (!time || Number.isNaN(time)) return '';
+  const diffMs = Date.now() - time;
+  if (diffMs < 0) return 'baru';
+  const minutes = Math.floor(diffMs / 60000);
+  if (minutes < 60) return `${Math.max(1, minutes)}m`;
+  const hours = Math.floor(minutes / 60);
+  if (hours < 24) return `${hours}h`;
+  const days = Math.floor(hours / 24);
+  if (days < 30) return `${days}d`;
+  if (days < 365) return `${Math.floor(days / 30)}mo`;
+  return `${Math.floor(days / 365)}y`;
+}
+
+function updateDate(comic) {
+  return comic.latest_chapter_time || comic.latest_chapter_date ||
+    comic.chapter_updated_at || comic.updated_at || comic.updatedAt ||
+    comic.last_update || comic.updated_date || comic.release_date || comic.created_at;
 }
 
 let browseComics = [];
@@ -287,19 +308,22 @@ function renderCatalog() {
   }
 
   if (viewMode === 'grid') {
-    container.className = 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4';
+    container.className = 'grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4';
     for (const c of list) {
       const cover = c.cover_portrait_url || c.cover_image_url || '';
       const title = esc(c.title);
       const type = esc(c.taxonomy?.Format?.[0]?.name || 'KOMIK');
       const latestCh = c.latest_chapter_number != null ? `Ch. ${esc(c.latest_chapter_number)}` : '';
       const rate = c.user_rate ? Number(c.user_rate).toFixed(1) : '4.9';
+      const updated = relativeAge(updateDate(c));
 
       const card = document.createElement('article');
       card.className = 'group flex flex-col bg-surface-container-low rounded-xl overflow-hidden border border-outline-variant hover:border-primary-container transition-all';
       card.innerHTML = `
         <a href="/chapters?manga=${c.manga_id}" class="relative aspect-[3/4] overflow-hidden bg-surface-container block">
           ${cover ? `<img src="${cover}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" referrerpolicy="no-referrer" loading="lazy">` : `<div class="w-full h-full flex items-center justify-center text-outline"><span class="material-symbols-outlined text-3xl">menu_book</span></div>`}
+          <div class="absolute inset-0 bg-gradient-to-t from-surface-container-lowest via-transparent to-transparent opacity-80"></div>
+          ${updated ? `<span class="absolute top-2 left-2 px-1.5 py-0.5 rounded text-[10px] font-bold bg-primary-container text-white shadow">${updated}</span>` : ''}
           <span class="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-surface-container-lowest/90 backdrop-blur-sm text-secondary text-[10px] font-semibold border border-outline-variant/60">
             ${type}
           </span>
@@ -308,11 +332,11 @@ function renderCatalog() {
             <span>${rate}</span>
           </div>
         </a>
-        <div class="p-3 flex flex-col justify-between flex-1 gap-1.5">
+        <div class="p-2.5 sm:p-3 flex flex-col justify-between flex-1 gap-1.5">
           <a href="/chapters?manga=${c.manga_id}" class="font-bold text-xs sm:text-sm text-on-surface group-hover:text-primary transition-colors line-clamp-1" title="${title}">
             ${title}
           </a>
-          <div class="flex items-center justify-between text-xs pt-1 border-t border-outline-variant/50">
+          <div class="flex items-center justify-between text-xs pt-1.5 border-t border-outline-variant/50">
             <span class="text-primary font-semibold text-[11px]">${latestCh}</span>
             <a href="/chapters?manga=${c.manga_id}" class="text-[11px] text-outline hover:text-on-surface font-semibold">Detail</a>
           </div>
@@ -322,7 +346,7 @@ function renderCatalog() {
     }
   } else {
     // List View
-    container.className = 'space-y-3';
+    container.className = 'space-y-2.5 sm:space-y-3';
     for (const c of list) {
       const cover = c.cover_portrait_url || c.cover_image_url || '';
       const title = esc(c.title);
@@ -331,32 +355,34 @@ function renderCatalog() {
       const genres = (c.taxonomy?.Genre || []).slice(0, 3).map(g => g.name).join(', ') || 'Serial';
       const latestCh = c.latest_chapter_number != null ? `Ch. ${esc(c.latest_chapter_number)}` : '';
       const rate = c.user_rate ? Number(c.user_rate).toFixed(1) : '4.9';
+      const updated = relativeAge(updateDate(c));
 
       const card = document.createElement('article');
-      card.className = 'bg-surface-container-low border border-surface-variant rounded-xl p-3 flex gap-4 relative overflow-hidden group hover:border-primary-container transition-all';
+      card.className = 'bg-surface-container-low border border-surface-variant rounded-xl p-2.5 sm:p-3 flex gap-3 sm:gap-4 relative overflow-hidden group hover:border-primary-container transition-all';
       card.innerHTML = `
-        <div class="relative w-20 sm:w-24 aspect-[3/4] flex-shrink-0 rounded-lg overflow-hidden border border-outline-variant bg-surface-container">
+        <div class="relative w-16 sm:w-24 aspect-[3/4] flex-shrink-0 rounded-lg overflow-hidden border border-outline-variant bg-surface-container">
           ${cover ? `<img src="${cover}" alt="${title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" referrerpolicy="no-referrer">` : ''}
+          ${updated ? `<span class="absolute top-1 left-1 px-1 py-0.2 rounded text-[9px] font-bold bg-primary-container text-white shadow">${updated}</span>` : ''}
         </div>
         <div class="flex flex-col justify-between flex-grow min-w-0 py-0.5">
           <div>
             <div class="flex items-start justify-between gap-2">
-              <a href="/chapters?manga=${c.manga_id}" class="font-bold text-sm sm:text-base text-on-surface truncate group-hover:text-primary transition-colors">${title}</a>
+              <a href="/chapters?manga=${c.manga_id}" class="font-bold text-xs sm:text-base text-on-surface truncate group-hover:text-primary transition-colors">${title}</a>
               <span class="flex items-center gap-0.5 text-amber-400 text-xs font-bold flex-shrink-0">
-                <span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span> ${rate}
+                <span class="material-symbols-outlined text-[13px] sm:text-[14px]" style="font-variation-settings: 'FILL' 1;">star</span> ${rate}
               </span>
             </div>
-            <p class="text-xs text-outline truncate mt-0.5">${author} • ${esc(genres)}</p>
-            <div class="flex items-center gap-1.5 mt-2">
+            <p class="text-[11px] sm:text-xs text-outline truncate mt-0.5">${author} • ${esc(genres)}</p>
+            <div class="flex items-center gap-1.5 mt-1.5 sm:mt-2">
               <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-surface-container border border-outline-variant text-secondary">${type}</span>
               <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-surface-container border border-outline-variant text-on-surface-variant">${c.status ? 'Ongoing' : 'Serial'}</span>
             </div>
           </div>
-          <div class="flex items-center justify-between pt-2 border-t border-outline-variant/60 mt-2 text-xs">
-            <span class="text-on-surface font-semibold">${latestCh ? `Rilis: ${latestCh}` : ''}</span>
-            <a href="/chapters?manga=${c.manga_id}" class="px-3 py-1 bg-primary-container text-white text-xs font-semibold rounded-lg hover:opacity-90 transition-opacity flex items-center gap-1">
+          <div class="flex items-center justify-between pt-1.5 sm:pt-2 border-t border-outline-variant/60 mt-1.5 sm:mt-2 text-xs">
+            <span class="text-on-surface font-semibold text-[11px] sm:text-xs">${latestCh ? `Rilis: ${latestCh}` : ''}</span>
+            <a href="/chapters?manga=${c.manga_id}" class="px-2.5 sm:px-3 py-1 bg-primary-container text-white text-[11px] sm:text-xs font-semibold rounded-lg hover:opacity-90 transition-opacity flex items-center gap-1">
               <span>Buka</span>
-              <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+              <span class="material-symbols-outlined text-[13px] sm:text-[14px]">arrow_forward</span>
             </a>
           </div>
         </div>

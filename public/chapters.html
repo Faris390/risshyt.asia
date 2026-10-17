@@ -47,46 +47,49 @@
 </head>
 <body class="bg-background text-on-surface font-sans antialiased min-h-screen flex flex-col">
   <!-- Top Navigation Header -->
+  <!-- Top Navigation Header -->
   <header class="bg-surface-container-low sticky top-0 z-50 border-b border-outline-variant">
-    <div class="max-w-[1000px] mx-auto px-4 h-16 flex items-center justify-between">
-      <a href="/library" class="flex items-center gap-2 text-on-surface-variant hover:text-on-surface transition-colors">
+    <div class="max-w-[1000px] mx-auto px-3 sm:px-4 h-14 sm:h-16 flex items-center justify-between">
+      <a href="/library" class="flex items-center gap-1.5 sm:gap-2 text-on-surface-variant hover:text-on-surface transition-colors py-1">
         <span class="material-symbols-outlined text-[20px]">arrow_back</span>
-        <span class="font-semibold text-sm">Kembali ke Perpustakaan</span>
+        <span class="font-semibold text-xs sm:text-sm"><span class="hidden sm:inline">Kembali ke </span>Perpustakaan</span>
       </a>
       <div class="flex items-center gap-2">
         <span class="w-6 h-6 rounded bg-primary-container flex items-center justify-center text-white text-xs font-bold">C</span>
-        <span class="font-bold tracking-tight">comicshyt</span>
+        <span class="font-bold tracking-tight text-sm sm:text-base">comicshyt</span>
       </div>
     </div>
   </header>
 
-  <main class="flex-1 max-w-[1000px] w-full mx-auto px-4 py-6">
+  <main class="flex-1 max-w-[1000px] w-full mx-auto px-3 sm:px-4 py-4 sm:py-6">
     <div id="info"></div>
-    <div id="status" class="py-8 text-center text-on-surface-variant">Memuat detail komik…</div>
+    <div id="status" class="py-8 text-center text-on-surface-variant text-sm">Memuat detail komik…</div>
 
-    <div id="list-area" class="mt-8 space-y-4" hidden>
+    <div id="list-area" class="mt-6 sm:mt-8 space-y-4" hidden>
       <!-- Reading Progress Bar -->
-      <div id="read-progress-section" class="bg-surface-container-low rounded-2xl border border-outline-variant p-4 sm:p-5" hidden>
-        <div class="flex items-center justify-between mb-3">
+      <div id="read-progress-section" class="bg-surface-container-low rounded-2xl border border-outline-variant p-3.5 sm:p-5" hidden>
+        <div class="flex items-center justify-between mb-2.5 sm:mb-3">
           <div class="flex items-center gap-2">
             <span class="material-symbols-outlined text-[20px] text-emerald-400" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
-            <span class="text-sm font-bold text-on-surface">Progress Bacaan</span>
+            <span class="text-xs sm:text-sm font-bold text-on-surface">Progress Bacaan</span>
           </div>
           <span id="read-progress-text" class="text-xs font-semibold text-on-surface-variant"></span>
         </div>
         <div class="w-full bg-surface-container-highest rounded-full h-2 overflow-hidden">
           <div id="read-progress-bar" class="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-400 transition-all duration-500 ease-out" style="width: 0%"></div>
         </div>
-        <div class="flex items-center justify-between mt-2 text-[11px] text-outline">
+        <div class="flex items-center justify-between mt-2 text-[10px] sm:text-[11px] text-outline">
           <span id="read-count-label">0 chapter dibaca</span>
           <span id="read-percent-label">0%</span>
         </div>
       </div>
 
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pb-3 border-b border-outline-variant">
-        <h2 class="text-lg font-bold text-on-surface flex items-center gap-2 self-start sm:self-auto">
-          <span class="material-symbols-outlined text-primary-container">format_list_bulleted</span>
-          <span>Daftar Chapter</span>
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pb-3 border-b border-outline-variant">
+        <h2 class="text-base sm:text-lg font-bold text-on-surface flex items-center justify-between sm:justify-start gap-2">
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary-container">format_list_bulleted</span>
+            <span>Daftar Chapter</span>
+          </span>
           <span id="chapter-count" class="text-xs px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant border border-outline-variant"></span>
         </h2>
         <div class="flex items-center gap-2 w-full sm:w-auto">
@@ -95,9 +98,9 @@
               <span class="material-symbols-outlined text-[18px]">search</span>
             </span>
             <input id="q" type="search" inputmode="numeric" placeholder="Cari nomor chapter…" 
-                   class="w-full pl-9 pr-3 py-1.5 bg-surface-container border border-outline-variant rounded-xl text-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary-container transition-colors">
+                   class="w-full pl-9 pr-3 py-1.5 bg-surface-container border border-outline-variant rounded-xl text-xs sm:text-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary-container transition-colors">
           </div>
-          <button id="sort" class="px-3 py-1.5 bg-surface-container border border-outline-variant hover:bg-surface-container-high rounded-xl text-sm font-medium transition-colors flex items-center gap-1.5 whitespace-nowrap">
+          <button id="sort" class="px-3 py-1.5 bg-surface-container border border-outline-variant hover:bg-surface-container-high rounded-xl text-xs sm:text-sm font-medium transition-colors flex items-center gap-1.5 whitespace-nowrap">
             <span class="material-symbols-outlined text-[16px]">swap_vert</span>
             <span id="sort-text">Terbaru</span>
           </button>
@@ -105,13 +108,13 @@
       </div>
 
       <!-- Filter tabs: Semua / Sudah Dibaca / Belum Dibaca -->
-      <div id="read-filter-tabs" class="flex items-center gap-1.5 overflow-x-auto pb-1" hidden>
-        <button data-filter="all" class="read-filter-btn px-3 py-1.5 rounded-lg bg-primary-container text-white text-xs font-semibold transition-all shadow-sm">Semua</button>
-        <button data-filter="read" class="read-filter-btn px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant text-xs transition-colors border border-outline-variant hover:text-on-surface flex items-center gap-1">
+      <div id="read-filter-tabs" class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-1" hidden>
+        <button data-filter="all" class="read-filter-btn px-3 py-1.5 rounded-lg bg-primary-container text-white text-xs font-semibold transition-all shadow-sm whitespace-nowrap">Semua</button>
+        <button data-filter="read" class="read-filter-btn px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant text-xs transition-colors border border-outline-variant hover:text-on-surface flex items-center gap-1 whitespace-nowrap">
           <span class="material-symbols-outlined text-[14px] text-emerald-400" style="font-variation-settings: 'FILL' 1;">check_circle</span>
           Sudah Dibaca
         </button>
-        <button data-filter="unread" class="read-filter-btn px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant text-xs transition-colors border border-outline-variant hover:text-on-surface flex items-center gap-1">
+        <button data-filter="unread" class="read-filter-btn px-3 py-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface-variant text-xs transition-colors border border-outline-variant hover:text-on-surface flex items-center gap-1 whitespace-nowrap">
           <span class="material-symbols-outlined text-[14px] text-outline">radio_button_unchecked</span>
           Belum Dibaca
         </button>
@@ -149,15 +152,15 @@ function renderInfo(m) {
   const genres = (m.taxonomy?.Genre || []).map(g => g.name).join(', ');
   const author = (m.taxonomy?.Author || []).map(a => a.name).join(', ');
   const cover = m.cover_portrait_url || m.cover_image_url || '';
-  const updated = m.updated_at || m.updatedAt || m.last_update || m.updated_date || m.release_date;
+  const updated = m.latest_chapter_time || m.latest_chapter_date || m.chapter_updated_at || m.updated_at || m.updatedAt || m.last_update || m.updated_date || m.release_date || m.created_at;
 
   const info = $('#info');
   info.innerHTML = `
-    <div class="flex flex-col md:flex-row gap-6 p-5 sm:p-6 bg-surface-container-low rounded-2xl border border-outline-variant">
-      <div class="w-36 sm:w-44 aspect-[3/4] rounded-xl overflow-hidden border border-outline-variant flex-shrink-0 bg-surface-container mx-auto md:mx-0">
+    <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 p-4 sm:p-6 bg-surface-container-low rounded-2xl border border-outline-variant">
+      <div class="w-32 sm:w-44 aspect-[3/4] rounded-xl overflow-hidden border border-outline-variant flex-shrink-0 bg-surface-container mx-auto sm:mx-0">
         ${cover ? `<img src="${cover}" alt="${m.title}" class="w-full h-full object-cover" referrerpolicy="no-referrer">` : `<div class="w-full h-full flex items-center justify-center text-outline"><span class="material-symbols-outlined text-4xl">menu_book</span></div>`}
       </div>
-      <div class="flex-1 flex flex-col justify-between">
+      <div class="flex-1 flex flex-col justify-between min-w-0">
         <div>
           <div class="flex items-center gap-2 flex-wrap mb-2">
             <span class="px-2 py-0.5 rounded text-[11px] font-bold uppercase bg-primary-container/20 text-primary border border-primary-container/30">${m.taxonomy?.Format?.[0]?.name || 'KOMIK'}</span>
@@ -168,9 +171,9 @@ function renderInfo(m) {
           </div>
           <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-on-surface mb-2">${m.title}</h1>
           <p class="text-xs text-on-surface-variant font-medium mb-3">${[author, genres].filter(Boolean).join(' • ')}${updated ? ` · Diperbarui ${fmtDate(updated)}` : ''}</p>
-          <p class="text-sm text-on-surface-variant leading-relaxed whitespace-pre-line mb-4">${esc(m.description || 'Tidak ada deskripsi.')}</p>
+          <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed whitespace-pre-line mb-4">${esc(m.description || 'Tidak ada deskripsi.')}</p>
         </div>
-        <div id="action-btn-container" class="pt-4 border-t border-outline-variant/60 flex items-center gap-3"></div>
+        <div id="action-btn-container" class="pt-4 border-t border-outline-variant/60 flex flex-wrap items-center gap-2 sm:gap-3"></div>
       </div>
     </div>
   `;
@@ -182,31 +185,30 @@ function renderActions() {
   const oldest = chapters[chapters.length - 1];
 
   const marked = getBookmarks()[mangaId];
-  const bookmarkButton = `<button type="button" id="bookmark-btn" class="px-4 py-2.5 rounded-xl font-medium text-sm transition-colors border border-outline-variant ${marked ? 'bg-primary-container text-white' : 'bg-surface-container hover:bg-surface-container-high text-on-surface'}">
+  const bookmarkButton = `<button type="button" id="bookmark-btn" class="px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl font-medium text-xs sm:text-sm transition-colors border border-outline-variant flex items-center justify-center gap-1.5 ${marked ? 'bg-primary-container text-white' : 'bg-surface-container hover:bg-surface-container-high text-on-surface'}">
     <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' ${marked ? 1 : 0};">bookmark</span>
-    ${marked ? 'Ditandai' : 'Tandai Komik'}
+    <span>${marked ? 'Ditandai' : 'Tandai'}</span>
   </button>`;
 
   if (lastRead) {
     container.innerHTML = `
-      <a href="/reader?id=${lastRead.chapterId}&manga=${mangaId}" class="px-5 py-2.5 bg-primary-container hover:bg-opacity-90 text-white rounded-xl font-semibold text-sm transition-colors flex items-center gap-2 shadow-sm">
+      <a href="/reader?id=${lastRead.chapterId}&manga=${mangaId}" class="flex-1 sm:flex-initial px-4 sm:px-5 py-2 sm:py-2.5 bg-primary-container hover:bg-opacity-90 text-white rounded-xl font-semibold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5 sm:gap-2 shadow-sm whitespace-nowrap">
         <span class="material-symbols-outlined text-[18px]">play_arrow</span>
-        <span>Lanjut Baca Ch. ${lastRead.number}</span>
+        <span>Lanjut Ch. ${lastRead.number}</span>
       </a>
-      <a href="${readerUrl(oldest)}" class="px-4 py-2.5 bg-surface-container hover:bg-surface-container-high text-on-surface rounded-xl font-medium text-sm transition-colors border border-outline-variant">
-        Mulai dari Ch. ${oldest.chapter_number}
+      <a href="${readerUrl(oldest)}" class="flex-1 sm:flex-initial px-3.5 sm:px-4 py-2 sm:py-2.5 bg-surface-container hover:bg-surface-container-high text-on-surface rounded-xl font-medium text-xs sm:text-sm transition-colors border border-outline-variant text-center whitespace-nowrap">
+        Mulai Ch. ${oldest.chapter_number}
       </a>
       ${bookmarkButton}
     `;
   } else {
     container.innerHTML = `
-      <a href="${readerUrl(oldest)}" class="px-5 py-2.5 bg-primary-container hover:bg-opacity-90 text-white rounded-xl font-semibold text-sm transition-colors flex items-center gap-2 shadow-sm">
+      <a href="${readerUrl(oldest)}" class="flex-1 sm:flex-initial px-4 sm:px-5 py-2 sm:py-2.5 bg-primary-container hover:bg-opacity-90 text-white rounded-xl font-semibold text-xs sm:text-sm transition-colors flex items-center justify-center gap-1.5 sm:gap-2 shadow-sm whitespace-nowrap">
         <span class="material-symbols-outlined text-[18px]">menu_book</span>
         <span>Mulai Baca Ch. ${oldest.chapter_number}</span>
       </a>
       ${bookmarkButton}
     `;
-  }
   $('#bookmark-btn').addEventListener('click', toggleBookmark);
 }
 
@@ -267,10 +269,10 @@ function renderList() {
 
     const a = document.createElement('a');
     a.href = readerUrl(c);
-    a.className = 'flex items-center justify-between px-4 py-3 text-sm text-inherit';
+    a.className = 'flex items-center justify-between px-3 sm:px-4 py-2.5 sm:py-3 text-xs sm:text-sm text-inherit gap-2';
 
     const left = document.createElement('div');
-    left.className = 'flex items-center gap-2 min-w-0';
+    left.className = 'flex items-center gap-2 min-w-0 flex-1';
 
     // Icon: bookmark untuk current, check untuk sudah dibaca, circle untuk belum
     if (isCurrent) {
@@ -282,12 +284,12 @@ function renderList() {
     }
 
     const titleSpan = document.createElement('span');
-    titleSpan.className = `font-semibold truncate ${isCurrent ? 'text-primary' : isRead ? 'text-on-surface-variant/60' : 'text-on-surface'}`;
+    titleSpan.className = `font-semibold truncate text-xs sm:text-sm ${isCurrent ? 'text-primary' : isRead ? 'text-on-surface-variant/60' : 'text-on-surface'}`;
     titleSpan.textContent = `Chapter ${c.chapter_number}${c.chapter_title ? ` — ${c.chapter_title}` : ''}`;
     left.appendChild(titleSpan);
 
     const right = document.createElement('div');
-    right.className = 'flex items-center gap-2 flex-shrink-0 ml-3';
+    right.className = 'flex items-center gap-1.5 sm:gap-2 flex-shrink-0 ml-2';
 
     if (isRead && !isCurrent) {
       const badge = document.createElement('span');
@@ -297,7 +299,7 @@ function renderList() {
     }
 
     const dateSpan = document.createElement('span');
-    dateSpan.className = `text-xs flex-shrink-0 ${isRead ? 'text-outline/50' : 'text-outline'}`;
+    dateSpan.className = `text-[11px] sm:text-xs flex-shrink-0 ${isRead ? 'text-outline/50' : 'text-outline'}`;
     dateSpan.textContent = fmtDate(c.release_date);
     right.appendChild(dateSpan);
 
