@@ -427,16 +427,22 @@ async function main() {
         latestReadComic = comic;
         latestReadProg = p;
       }
-
-      filterAndDisplay();
-      const personalCount = loadedComics.filter(c => {
-        const h = historyMap()[c.manga_id];
-        return (h && Object.keys(h).length) || bookmarkMap()[c.manga_id];
-      }).length;
-      $('#stat-total').textContent = `${personalCount} Komik`;
-
-      gridEl.appendChild(createComicCard(comic, p));
     }
+
+    // Sort by update terkini (descending) setelah semua data loaded
+    loadedComics.sort((a, b) => {
+      const ta = updateDate(a) ? new Date(updateDate(a)).getTime() : 0;
+      const tb = updateDate(b) ? new Date(updateDate(b)).getTime() : 0;
+      return tb - ta;
+    });
+
+    filterAndDisplay();
+
+    const personalCount = loadedComics.filter(c => {
+      const h = historyMap()[c.manga_id];
+      return (h && Object.keys(h).length) || bookmarkMap()[c.manga_id];
+    }).length;
+    $('#stat-total').textContent = `${personalCount} Komik`;
 
     if (latestReadComic) {
       renderHeroProgress(latestReadComic, latestReadProg);
