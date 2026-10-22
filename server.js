@@ -3,7 +3,7 @@ const path = require('path');
 const { Readable } = require('stream');
 
 const PORT = process.env.PORT || 3001;
-const HOST = '127.0.0.1';              // hanya lokal; akses lewat SSH tunnel
+const HOST = '127.0.0.1';
 const API = 'https://api.shngm.io/v1';
 const HEADERS = {
   accept: 'application/json',
@@ -16,18 +16,16 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-// ---------- cache sederhana (in-memory) ----------
 const cache = new Map();
 async function cached(key, ttlMs, fn) {
   const hit = cache.get(key);
   if (hit && hit.exp > Date.now()) return hit.val;
   const val = await fn();
   cache.set(key, { val, exp: Date.now() + ttlMs });
-  if (cache.size > 500) cache.delete(cache.keys().next().value); // buang yang terlama
+  if (cache.size > 500) cache.delete(cache.keys().next().value);
   return val;
 }
 
-// ---------- antrean request ke upstream: jeda 300ms antar request ----------
 let chain = Promise.resolve();
 function throttled(fn) {
   const p = chain.then(fn);

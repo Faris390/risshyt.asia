@@ -347,7 +347,11 @@
       if (sortVal === 'views') list.sort((a, b) => (b.view_count || 0) - (a.view_count || 0));
       else if (sortVal === 'rate') list.sort((a, b) => (b.user_rate || 0) - (a.user_rate || 0));
       else if (sortVal === 'title') list.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
-      else list.sort((a, b) => (b.latest_chapter_number || 0) - (a.latest_chapter_number || 0));
+      else list.sort((a, b) => {
+        const tA = updateDate(a) ? new Date(updateDate(a)).getTime() : 0;
+        const tB = updateDate(b) ? new Date(updateDate(b)).getTime() : 0;
+        return tB - tA;
+      });
 
       const totalItems = list.length;
       const totalPages = Math.ceil(totalItems / PAGE_SIZE) || 1;
